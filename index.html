@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Survey of Migrate Students Year 2026-27 - Panchayat Samiti Majalgaon</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+    <style>
+        body { background: #f0f4f8; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .card { background: #ffffff; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); }
+        .input-focus:focus { border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2); outline: none; }
+    </style>
+</head>
+<body class="min-h-screen py-6 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-4xl mx-auto">
+        <!-- Header -->
+        <div class="card p-6 mb-6 text-center border-t-4 border-blue-600">
+            <h2 class="text-xs font-semibold text-blue-600 tracking-wide uppercase">Samagra Shiksha Zilla Parishad, Beed</h2>
+            <h1 class="text-2xl sm:text-3xl font-extrabold text-gray-900 mt-1">Survey of Migrate Students Year 2026-27</h1>
+            <p class="text-sm text-gray-600 mt-1">Panchayat Samiti Majalgaon - Cluster & School Level Data Collection Portal</p>
+        </div>
+
+        <!-- Main Form Card -->
+        <div class="card p-6 sm:p-8 mb-6">
+            <form id="migrateForm" class="space-y-6">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <!-- 2. Name of Block (Locked to Majalgaon) -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">2. Name of Block</label>
+                        <input type="text" id="blockName" value="Majalgaon" readonly class="w-full px-4 py-2 bg-gray-100 border border-gray-300 rounded-lg text-gray-700 font-medium cursor-not-allowed">
+                    </div>
+
+                    <!-- 3. Name of Cluster -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">3. Name of Cluster <span class="text-red-500">*</span></label>
+                        <select id="clusterName" required class="w-full px-4 py-2 border border-gray-300 rounded-lg input-focus bg-white">
+                            <option value="">-- Select Cluster --</option>
+                        </select>
+                    </div>
+
+                    <!-- 4. School Name -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">4. School Name <span class="text-red-500">*</span></label>
+                        <select id="schoolName" required class="w-full px-4 py-2 border border-gray-300 rounded-lg input-focus bg-white">
+                            <option value="">-- Select School --</option>
+                        </select>
+                    </div>
+
+                    <!-- 5. Udis Code (Auto & Locked) -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">5. Udis Code</label>
+                        <input type="text" id="udisCode" readonly placeholder="Auto-populated" class="w-full px-4 py-2 bg-gray-100 border border-gray-300 rounded-lg text-gray-700 font-medium cursor-not-allowed">
+                    </div>
+
+                    <!-- Lock School Selection Notice & Button to Change School -->
+                    <div id="schoolLockNotice" class="sm:col-span-2 hidden bg-blue-50 border border-blue-200 p-3 rounded-lg flex justify-between items-center text-xs text-blue-800">
+                        <span><i class="fa-solid fa-lock mr-1"></i> Cluster and School are locked. You can now add student records.</span>
+                        <button type="button" id="unlockSchoolBtn" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded font-medium">Change School</button>
+                    </div>
+
+                    <!-- Student Details Section Header -->
+                    <div class="sm:col-span-2 border-t pt-4">
+                        <h3 class="text-md font-bold text-gray-800"><i class="fa-solid fa-user-graduate mr-2 text-blue-600"></i> Student Details</h3>
+                    </div>
+
+                    <!-- 6. Name of Student -->
+                    <div class="sm:col-span-2">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">6. Name of Student <span class="text-red-500">*</span></label>
+                        <input type="text" id="studentName" required placeholder="Enter student full name in English" class="w-full px-4 py-2 border border-gray-300 rounded-lg input-focus">
+                    </div>
+
+                    <!-- 7. Aadhaar Card No -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">7. Aadhaar Card No <span class="text-red-500">*</span></label>
+                        <input type="text" id="aadhaarNo" required maxlength="12" pattern="[0-9]{12}" placeholder="12-digit Aadhaar number" class="w-full px-4 py-2 border border-gray-300 rounded-lg input-focus">
+                    </div>
+
+                    <!-- 8. Student ID -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">8. Student ID (SARAL ID)</label>
+                        <input type="text" id="studentId" placeholder="Enter student SARAL ID" class="w-full px-4 py-2 border border-gray-300 rounded-lg input-focus">
+                    </div>
+
+                    <!-- 9. Boy / Girl -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">9. Boy / Girl <span class="text-red-500">*</span></label>
+                        <select id="gender" required class="w-full px-4 py-2 border border-gray-300 rounded-lg input-focus bg-white">
+                            <option value="">-- Select Gender --</option>
+                            <option value="Boy">Boy</option>
+                            <option value="Girl">Girl</option>
+                        </select>
+                    </div>
+
+                    <!-- 10. Age -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">10. Age <span class="text-red-500">*</span></label>
+                        <input type="number" id="age" required min="3" max="18" placeholder="Age (3-18)" class="w-full px-4 py-2 border border-gray-300 rounded-lg input-focus">
+                    </div>
+
+                    <!-- 11. Class (1 to 12) -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">11. Class <span class="text-red-500">*</span></label>
+                        <select id="studentClass" required class="w-full px-4 py-2 border border-gray-300 rounded-lg input-focus bg-white">
+                            <option value="">-- Select Class --</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                        </select>
+                    </div>
+
+                    <!-- 12. Cast / Cat -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">12. Cast / Cat <span class="text-red-500">*</span></label>
+                        <select id="category" required class="w-full px-4 py-2 border border-gray-300 rounded-lg input-focus bg-white">
+                            <option value="">-- Select Category --</option>
+                            <option value="SC">SC</option>
+                            <option value="ST">ST</option>
+                            <option value="NTC">NTC</option>
+                            <option value="NTD">NTD</option>
+                            <option value="OBC">OBC</option>
+                            <option value="General">General</option>
+                        </select>
+                    </div>
+
+                    <!-- 13. Reason -->
+                    <div class="sm:col-span-2">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">13. Reason for Migration <span class="text-red-500">*</span></label>
+                        <select id="reason" required class="w-full px-4 py-2 border border-gray-300 rounded-lg input-focus bg-white">
+                            <option value="">-- Select Reason --</option>
+                            <option value="Sugarcane Cutting">Sugarcane Cutting</option>
+                            <option value="Mining Work">Mining Work</option>
+                            <option value="Bricks Making Work">Bricks Making Work</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+
+                    <!-- 14, 15, 16. Which place will be migrate -->
+                    <div class="sm:col-span-2 bg-gray-50 p-4 rounded-lg border border-gray-200">
+                        <label class="block text-sm font-semibold text-gray-800 mb-3">Migration Destination Details</label>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                            <div>
+                                <label class="block text-xs font-medium text-gray-600 mb-1">14. Taluka <span class="text-red-500">*</span></label>
+                                <input type="text" id="migrateTaluka" required placeholder="Taluka" class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white input-focus">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-gray-600 mb-1">15. District <span class="text-red-500">*</span></label>
+                                <input type="text" id="migrateDistrict" required placeholder="District" class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white input-focus">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-gray-600 mb-1">16. State <span class="text-red-500">*</span></label>
+                                <select id="migrateState" required class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white input-focus">
+                                    <option value="">-- Select State --</option>
+                                    <option value="Andhra Pradesh">Andhra Pradesh</option>
+                                    <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                                    <option value="Assam">Assam</option>
+                                    <option value="Bihar">Bihar</option>
+                                    <option value="Chhattisgarh">Chhattisgarh</option>
+                                    <option value="Goa">Goa</option>
+                                    <option value="Gujarat">Gujarat</option>
+                                    <option value="Haryana">Haryana</option>
+                                    <option value="Himachal Pradesh">Himachal Pradesh</option>
+                                    <option value="Jharkhand">Jharkhand</option>
+                                    <option value="Karnataka">Karnataka</option>
+                                    <option value="Kerala">Kerala</option>
+                                    <option value="Madhya Pradesh">Madhya Pradesh</option>
+                                    <option value="Maharashtra" selected>Maharashtra</option>
+                                    <option value="Manipur">Manipur</option>
+                                    <option value="Meghalaya">Meghalaya</option>
+                                    <option value="Mizoram">Mizoram</option>
+                                    <option value="Nagaland">Nagaland</option>
+                                    <option value="Odisha">Odisha</option>
+                                    <option value="Punjab">Punjab</option>
+                                    <option value="Rajasthan">Rajasthan</option>
+                                    <option value="Sikkim">Sikkim</option>
+                                    <option value="Tamil Nadu">Tamil Nadu</option>
+तुम्ही मागितलेला संपूर्ण **HTML कोड** (ज्यामध्ये सर्व शाळांची नावे, UDISE कोड, क्लस्टर लॉक, नवीन विद्यार्थी ॲड करून स्थानिक यादीत पाहणे, हिरव्या बटनावर क्लिक करून फायरबेसवर सेव्ह करणे आणि ॲडमिन डॅशबोर्डसह एक्सेल डाउनलोड) खालीलप्रमाणे थेट वापरण्यासाठी उपलब्ध आहे:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Survey of Migrate Students Year 2026-27 - Panchayat Samiti Majalgaon</title>
+    <link href="[https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css](https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css)" rel="stylesheet">
+    <link rel="stylesheet" href="[https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css](https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css)">
+    <script src="[https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js](https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js)"></script>
+    <script src="[https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js](https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js)"></script>
+    <style>
+        body { background: #f0f4f8; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .card { background: #ffffff; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); }
+        .input-focus:focus { border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2); outline: none; }
+    </style>
+</head>
+<body class="min-h-screen py-6 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-4xl mx-auto">
+        <!-- Header -->
+        <div class="card p-6 mb-6 text-center border-t-4 border-blue-600">
+            <h2 class="text-xs font-semibold text-blue-600 tracking-wide uppercase">Samagra Shiksha Zilla Parishad, Beed</h2>
+            <h1 class="text-2xl sm:text-3xl font-extrabold text-gray-900 mt-1">Survey of Migrate Students Year 2026-27</h1>
+            <p class="text-sm text-gray-600 mt-1">Panchayat Samiti Majalgaon - Cluster & School Level Data Collection Portal</p>
+        </div>
+
+        <!-- Main Form Card -->
+        <div class="card p-6 sm:p-8 mb-6">
+            <form id="migrateForm" class="space-y-6">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <!-- 2. Name of Block (Locked to Majalgaon) -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">2. Name of Block</label>
+                        <input type="text" id="blockName" value="Majalgaon" readonly class="w-full px-4 py-2 bg-gray-100 border border-gray-300 rounded-lg text-gray-700 font-medium cursor-not-allowed">
+                    </div>
+
+                    <!-- 3. Name of Cluster -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">3. Name of Cluster <span class="text-red-500">*</span></label>
+                        <select id="clusterName" required class="w-full px-4 py-2 border border-gray-300 rounded-lg input-focus bg-white">
+                            <option value="">-- Select Cluster --</option>
+                        </select>
+                    </div>
+
+                    <!-- 4. School Name -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">4. School Name <span class="text-red-500">*</span></label>
+                        <select id="schoolName" required class="w-full px-4 py-2 border border-gray-300 rounded-lg input-focus bg-white">
+                            <option value="">-- Select School --</option>
+                        </select>
+                    </div>
+
+                    <!-- 5. Udis Code (Auto & Locked) -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">5. Udis Code</label>
+                        <input type="text" id="udisCode" readonly placeholder="Auto-populated" class="w-full px-4 py-2 bg-gray-100 border border-gray-300 rounded-lg text-gray-700 font-medium cursor-not-allowed">
+                    </div>
+
+                    <!-- Lock School Selection Notice & Button to Change School -->
+                    <div id="schoolLockNotice" class="sm:col-span-2 hidden bg-blue-50 border border-blue-200 p-3 rounded-lg flex justify-between items-center text-xs text-blue-800">
+                        <span><i class="fa-solid fa-lock mr-1"></i> Cluster and School are locked. You can now add student records.</span>
+                        <button type="button" id="unlockSchoolBtn" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded font-medium">Change School</button>
+                    </div>
+
+                    <!-- Student Details Section Header -->
+                    <div class="sm:col-span-2 border-t pt-4">
+                        <h3 class="text-md font-bold text-gray-800"><i class="fa-solid fa-user-graduate mr-2 text-blue-600"></i> Student Details</h3>
+                    </div>
+
+                    <!-- 6. Name of Student -->
+                    <div class="sm:col-span-2">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">6. Name of Student <span class="text-red-500">*</span></label>
+                        <input type="text" id="studentName" required placeholder="Enter student full name in English" class="w-full px-4 py-2 border border-gray-300 rounded-lg input-focus">
+                    </div>
+
+                    <!-- 7. Aadhaar Card No -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">7. Aadhaar Card No <span class="text-red-500">*</span></label>
+                        <input type="text" id="aadhaarNo" required maxlength="12" pattern="[0-9]{12}" placeholder="12-digit Aadhaar number" class="w-full px-4 py-2 border border-gray-300 rounded-lg input-focus">
+                    </div>
+
+                    <!-- 8. Student ID -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">8. Student ID (SARAL ID)</label>
+                        <input type="text" id="studentId" placeholder="Enter student SARAL ID" class="w-full px-4 py-2 border border-gray-300 rounded-lg input-focus">
+                    </div>
+
+                    <!-- 9. Boy / Girl -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">9. Boy / Girl <span class="text-red-500">*</span></label>
+                        <select id="gender" required class="w-full px-4 py-2 border border-gray-300 rounded-lg input-focus bg-white">
+                            <option value="">-- Select Gender --</option>
+                            <option value="Boy">Boy</option>
+                            <option value="Girl">Girl</option>
+                        </select>
+                    </div>
+
+                    <!-- 10. Age -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">10. Age <span class="text-red-500">*</span></label>
+                        <input type="number" id="age" required min="3" max="18" placeholder="Age (3-18)" class="w-full px-4 py-2 border border-gray-300 rounded-lg input-focus">
+                    </div>
+
+                    <!-- 11. Class -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">11. Class <span class="text-red-500">*</span></label>
+                        <select id="studentClass" required class="w-full px-4 py-2 border border-gray-300 rounded-lg input-focus bg-white">
+                            <option value="">-- Select Class --</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                        </select>
+                    </div>
+
+                    <!-- 12. Cast / Cat -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">12. Cast / Cat <span class="text-red-500">*</span></label>
+                        <select id="category" required class="w-full px-4 py-2 border border-gray-300 rounded-lg input-focus bg-white">
+                            <option value="">-- Select Category --</option>
+                            <option value="SC">SC</option>
+                            <option value="ST">ST</option>
+                            <option value="NTC">NTC</option>
+                            <option value="NTD">NTD</option>
+                            <option value="OBC">OBC</option>
+                            <option value="General">General</option>
+                        </select>
+                    </div>
+
+                    <!-- 13. Reason -->
+                    <div class="sm:col-span-2">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">13. Reason for Migration <span class="text-red-500">*</span></label>
+                        <select id="reason" required class="w-full px-4 py-2 border border-gray-300 rounded-lg input-focus bg-white">
+                            <option value="">-- Select Reason --</option>
+                            <option value="Sugarcane Cutting">Sugarcane Cutting</option>
+                            <option value="Mining Work">Mining Work</option>
+                            <option value="Bricks Making Work">Bricks Making Work</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+
+                    <!-- 14, 15, 16. Which place will be migrate -->
+                    <div class="sm:col-span-2 bg-gray-50 p-4 rounded-lg border border-gray-200">
+                        <label class="block text-sm font-semibold text-gray-800 mb-3">Migration Destination Details</label>
+                        <div class="grid grid-cols-1 sm:
