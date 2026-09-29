@@ -21,16 +21,15 @@
             transition: opacity 0.5s ease-in-out;
         }
 
-        /* Force Landscape Orientation and Fix All 17 Columns on One Page */
+        /* Fit to Content and No Text Wrap Print Settings */
         @media print {
-            @page { size: landscape; margin: 5mm; }
-            body { transform: rotate(0deg); }
+            @page { size: landscape; margin: 4mm; }
             body * { visibility: hidden; }
             #pdfContent, #pdfContent * { visibility: visible; }
             #pdfContent { position: absolute; left: 0; top: 0; width: 100%; margin: 0; padding: 0; background: white; }
             .no-print { display: none !important; }
-            table { width: 100% !important; font-size: 7.5px !important; border-collapse: collapse !important; table-layout: fixed !important; }
-            th, td { padding: 2px 1px !important; overflow: hidden; word-break: break-all; }
+            table { width: 100% !important; font-size: 7.5px !important; border-collapse: collapse !important; white-space: nowrap !important; }
+            th, td { padding: 3px 2px !important; white-space: nowrap !important; width: auto !important; }
         }
     </style>
 </head>
@@ -254,27 +253,27 @@
                     <p id="printSchoolHeader" class="text-sm text-gray-700 mt-1 font-semibold"></p>
                 </div>
                 <div class="overflow-x-auto mb-6">
-                    <table class="min-w-full divide-y divide-gray-200 text-[8px] border border-gray-300">
+                    <table class="w-full divide-y divide-gray-200 text-[8px] border border-gray-300">
                         <thead class="bg-gray-100">
                             <tr>
-                                <th class="px-1 py-2 text-center font-semibold text-gray-800 border">1.Sr.No</th>
-                                <th class="px-1 py-2 text-left font-semibold text-gray-800 border">2.Block</th>
-                                <th class="px-1 py-2 text-left font-semibold text-gray-800 border">3.Cluster</th>
-                                <th class="px-1 py-2 text-left font-semibold text-gray-800 border">4.School Name</th>
-                                <th class="px-1 py-2 text-left font-semibold text-gray-800 border">5.Udise Code</th>
-                                <th class="px-1 py-2 text-left font-semibold text-gray-800 border">6.Student Name</th>
-                                <th class="px-1 py-2 text-left font-semibold text-gray-800 border">7.Aadhaar No</th>
-                                <th class="px-1 py-2 text-left font-semibold text-gray-800 border">8.PEN ID</th>
-                                <th class="px-1 py-2 text-left font-semibold text-gray-800 border">9.Gender</th>
-                                <th class="px-1 py-2 text-center font-semibold text-gray-800 border">10.Age</th>
-                                <th class="px-1 py-2 text-center font-semibold text-gray-800 border">11.Class</th>
-                                <th class="px-1 py-2 text-left font-semibold text-gray-800 border">12.Cast/Cat</th>
-                                <th class="px-1 py-2 text-left font-semibold text-gray-800 border">13.Reason</th>
-                                <th class="px-1 py-2 text-left font-semibold text-gray-800 border">14.Taluka</th>
-                                <th class="px-1 py-2 text-left font-semibold text-gray-800 border">15.District</th>
-                                <th class="px-1 py-2 text-left font-semibold text-gray-800 border">16.State</th>
-                                <th class="px-1 py-2 text-left font-semibold text-gray-800 border">17.Parent Contact</th>
-                                <th class="px-1 py-2 text-center font-semibold text-gray-800 border no-print">Action</th>
+                                <th class="px-1 py-2 text-center font-semibold text-gray-800 border whitespace-nowrap">1.Sr.No</th>
+                                <th class="px-1 py-2 text-left font-semibold text-gray-800 border whitespace-nowrap">2.Block</th>
+                                <th class="px-1 py-2 text-left font-semibold text-gray-800 border whitespace-nowrap">3.Cluster</th>
+                                <th class="px-1 py-2 text-left font-semibold text-gray-800 border whitespace-nowrap">4.School Name</th>
+                                <th class="px-1 py-2 text-left font-semibold text-gray-800 border whitespace-nowrap">5.Udise Code</th>
+                                <th class="px-1 py-2 text-left font-semibold text-gray-800 border whitespace-nowrap">6.Student Name</th>
+                                <th class="px-1 py-2 text-left font-semibold text-gray-800 border whitespace-nowrap">7.Aadhaar No</th>
+                                <th class="px-1 py-2 text-left font-semibold text-gray-800 border whitespace-nowrap">8.PEN ID</th>
+                                <th class="px-1 py-2 text-left font-semibold text-gray-800 border whitespace-nowrap">9.Gender</th>
+                                <th class="px-1 py-2 text-center font-semibold text-gray-800 border whitespace-nowrap">10.Age</th>
+                                <th class="px-1 py-2 text-center font-semibold text-gray-800 border whitespace-nowrap">11.Class</th>
+                                <th class="px-1 py-2 text-left font-semibold text-gray-800 border whitespace-nowrap">12.Cast/Cat</th>
+                                <th class="px-1 py-2 text-left font-semibold text-gray-800 border whitespace-nowrap">13.Reason</th>
+                                <th class="px-1 py-2 text-left font-semibold text-gray-800 border whitespace-nowrap">14.Taluka</th>
+                                <th class="px-1 py-2 text-left font-semibold text-gray-800 border whitespace-nowrap">15.District</th>
+                                <th class="px-1 py-2 text-left font-semibold text-gray-800 border whitespace-nowrap">16.State</th>
+                                <th class="px-1 py-2 text-left font-semibold text-gray-800 border whitespace-nowrap">17.Parent Contact</th>
+                                <th class="px-1 py-2 text-center font-semibold text-gray-800 border no-print whitespace-nowrap">Action</th>
                             </tr>
                         </thead>
                         <tbody id="schoolStudentsTableBody" class="bg-white divide-y divide-gray-200">
@@ -479,24 +478,24 @@
                             count++;
                             const tr = document.createElement('tr');
                             tr.innerHTML = `
-                                <td class="px-1 py-2 text-center border">${count}</td>
-                                <td class="px-1 py-2 border">${r.block || 'MAJALGAON'}</td>
-                                <td class="px-1 py-2 border">${r.cluster || clusterName}</td>
-                                <td class="px-1 py-2 font-medium border">${r.schoolName || ''}</td>
-                                <td class="px-1 py-2 border">${r.udiseCode || ''}</td>
-                                <td class="px-1 py-2 font-medium border">${r.studentName || ''}</td>
-                                <td class="px-1 py-2 border">${r.aadhaarNo || ''}</td>
-                                <td class="px-1 py-2 border">${r.penId || ''}</td>
-                                <td class="px-1 py-2 border">${r.gender || ''}</td>
-                                <td class="px-1 py-2 text-center border">${r.age || ''}</td>
-                                <td class="px-1 py-2 text-center border">${r.studentClass || ''}</td>
-                                <td class="px-1 py-2 border">${r.category || ''}</td>
-                                <td class="px-1 py-2 border">${r.reason || ''}</td>
-                                <td class="px-1 py-2 border">${r.migrateTaluka || ''}</td>
-                                <td class="px-1 py-2 border">${r.migrateDistrict || ''}</td>
-                                <td class="px-1 py-2 border">${r.migrateState || ''}</td>
-                                <td class="px-1 py-2 border">${r.parentContact || ''}</td>
-                                <td class="px-1 py-2 text-center border action-col no-print">
+                                <td class="px-1 py-2 text-center border whitespace-nowrap">${count}</td>
+                                <td class="px-1 py-2 border whitespace-nowrap">${r.block || 'MAJALGAON'}</td>
+                                <td class="px-1 py-2 border whitespace-nowrap">${r.cluster || clusterName}</td>
+                                <td class="px-1 py-2 font-medium border whitespace-nowrap">${r.schoolName || ''}</td>
+                                <td class="px-1 py-2 border whitespace-nowrap">${r.udiseCode || ''}</td>
+                                <td class="px-1 py-2 font-medium border whitespace-nowrap">${r.studentName || ''}</td>
+                                <td class="px-1 py-2 border whitespace-nowrap">${r.aadhaarNo || ''}</td>
+                                <td class="px-1 py-2 border whitespace-nowrap">${r.penId || ''}</td>
+                                <td class="px-1 py-2 border whitespace-nowrap">${r.gender || ''}</td>
+                                <td class="px-1 py-2 text-center border whitespace-nowrap">${r.age || ''}</td>
+                                <td class="px-1 py-2 text-center border whitespace-nowrap">${r.studentClass || ''}</td>
+                                <td class="px-1 py-2 border whitespace-nowrap">${r.category || ''}</td>
+                                <td class="px-1 py-2 border whitespace-nowrap">${r.reason || ''}</td>
+                                <td class="px-1 py-2 border whitespace-nowrap">${r.migrateTaluka || ''}</td>
+                                <td class="px-1 py-2 border whitespace-nowrap">${r.migrateDistrict || ''}</td>
+                                <td class="px-1 py-2 border whitespace-nowrap">${r.migrateState || ''}</td>
+                                <td class="px-1 py-2 border whitespace-nowrap">${r.parentContact || ''}</td>
+                                <td class="px-1 py-2 text-center border action-col no-print whitespace-nowrap">
                                     <button onclick="deleteRecord('${key}')" class="text-red-600 hover:text-red-900 px-2 py-1"><i class="fa-solid fa-trash"></i></button>
                                 </td>
                             `;
