@@ -21,13 +21,15 @@
             transition: opacity 0.5s ease-in-out;
         }
 
-        /* Print Settings for Direct Landscape PDF Generation with all 17 columns */
+        /* Perfect Landscape Print Settings for all 17 columns */
         @media print {
-            @page { size: landscape; margin: 5mm; }
+            @page { size: A4 landscape; margin: 5mm; }
             body * { visibility: hidden; }
             #pdfContent, #pdfContent * { visibility: visible; }
             #pdfContent { position: absolute; left: 0; top: 0; width: 100%; margin: 0; padding: 0; background: white; }
             .no-print { display: none !important; }
+            table { width: 100% !important; font-size: 9px !important; border-collapse: collapse !important; }
+            th, td { padding: 4px 2px !important; word-break: break-word; }
         }
     </style>
 </head>
@@ -38,7 +40,7 @@
         <span id="flashText">विद्यार्थी यशस्वीरित्या सेव्ह झाला!</span>
     </div>
 
-    <div class="max-w-6xl mx-auto">
+    <div class="max-w-7xl mx-auto">
         <!-- Header -->
         <div class="card p-6 mb-6 text-center border-t-4 border-blue-600 no-print">
             <h2 class="text-xs font-semibold text-blue-600 tracking-wide uppercase">Samagra Shiksha Zilla Parishad, Beed</h2>
