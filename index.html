@@ -21,15 +21,27 @@
             transition: opacity 0.5s ease-in-out;
         }
 
-        /* Fit to Content and No Text Wrap Print Settings */
+        /* Strict Fit to Content & No Text Wrap Rules */
         @media print {
             @page { size: landscape; margin: 4mm; }
             body * { visibility: hidden; }
             #pdfContent, #pdfContent * { visibility: visible; }
             #pdfContent { position: absolute; left: 0; top: 0; width: 100%; margin: 0; padding: 0; background: white; }
             .no-print { display: none !important; }
-            table { width: 100% !important; font-size: 7.5px !important; border-collapse: collapse !important; white-space: nowrap !important; }
-            th, td { padding: 3px 2px !important; white-space: nowrap !important; width: auto !important; }
+            
+            table { 
+                width: auto !important; 
+                max-width: none !important; 
+                font-size: 7.5px !important; 
+                border-collapse: collapse !important; 
+                table-layout: auto !important; 
+            }
+            th, td { 
+                white-space: nowrap !important; 
+                word-break: normal !important; 
+                padding: 3px 3px !important; 
+                width: 1% !important; 
+            }
         }
     </style>
 </head>
@@ -253,7 +265,7 @@
                     <p id="printSchoolHeader" class="text-sm text-gray-700 mt-1 font-semibold"></p>
                 </div>
                 <div class="overflow-x-auto mb-6">
-                    <table class="w-full divide-y divide-gray-200 text-[8px] border border-gray-300">
+                    <table class="w-full divide-y divide-gray-200 text-[7.5px] border border-gray-300" style="table-layout: auto;">
                         <thead class="bg-gray-100">
                             <tr>
                                 <th class="px-1 py-2 text-center font-semibold text-gray-800 border whitespace-nowrap">1.Sr.No</th>
