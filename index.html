@@ -37,14 +37,14 @@
 
     <div class="max-w-4xl mx-auto">
         <!-- Header -->
-        <div class="card p-6 mb-6 text-center border-t-4 border-blue-600">
+        <div class="card p-6 mb-6 text-center border-t-4 border-blue-600 no-print">
             <h2 class="text-xs font-semibold text-blue-600 tracking-wide uppercase">Samagra Shiksha Zilla Parishad, Beed</h2>
             <h1 class="text-2xl sm:text-3xl font-extrabold text-gray-900 mt-1">Survey of Migrate Students Year 2026-27</h1>
             <p class="text-sm text-gray-600 mt-1">Panchayat Samiti Majalgaon - Cluster & School Level Data Collection Portal</p>
         </div>
 
         <!-- Main Form Card -->
-        <div class="card p-6 sm:p-8 mb-6">
+        <div class="card p-6 sm:p-8 mb-6 no-print">
             <form id="migrateForm" class="space-y-6">
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <!-- 2. Name of Block (Locked to Majalgaon) -->
@@ -240,33 +240,30 @@
             </form>
         </div>
 
-        <!-- Added Students Local List Section with PDF Download Option -->
+        <!-- Added Students Local List Section with Clean Header & PDF Download -->
         <div id="schoolStudentsSection" class="card p-6 mb-6 hidden">
             <div id="printableArea">
-                <div class="flex justify-between items-center mb-4 border-b pb-3">
-                    <div>
-                        <h3 class="font-bold text-gray-900 text-lg"><i class="fa-solid fa-list-check mr-2 text-green-600"></i> जोडलेल्या विद्यार्थ्यांची यादी (Migrate Students Survey)</h3>
-                        <p id="printSchoolHeader" class="text-xs text-gray-600 mt-1 font-semibold"></p>
-                    </div>
-                    <span id="currentSchoolBadge" class="text-xs bg-green-100 text-green-800 px-3 py-1 rounded-full font-medium no-print"></span>
+                <div class="text-center mb-4 border-b pb-3">
+                    <h3 class="font-bold text-gray-900 text-xl tracking-wide uppercase">Migrate Students List</h3>
+                    <p id="printSchoolHeader" class="text-sm text-gray-700 mt-1 font-semibold"></p>
                 </div>
                 <div class="overflow-x-auto mb-6">
-                    <table class="min-w-full divide-y divide-gray-200 text-xs border border-gray-200">
-                        <thead class="bg-gray-50">
+                    <table class="min-w-full divide-y divide-gray-200 text-xs border border-gray-300">
+                        <thead class="bg-gray-100">
                             <tr>
-                                <th class="px-2 py-2 text-left font-semibold text-gray-700 border">Sr.No</th>
-                                <th class="px-2 py-2 text-left font-semibold text-gray-700 border">Student Name</th>
-                                <th class="px-2 py-2 text-left font-semibold text-gray-700 border">Gender</th>
-                                <th class="px-2 py-2 text-left font-semibold text-gray-700 border">Age</th>
-                                <th class="px-2 py-2 text-left font-semibold text-gray-700 border">Class</th>
-                                <th class="px-2 py-2 text-left font-semibold text-gray-700 border">Aadhaar No</th>
-                                <th class="px-2 py-2 text-left font-semibold text-gray-700 border">PEN ID</th>
-                                <th class="px-2 py-2 text-left font-semibold text-gray-700 border">Reason</th>
-                                <th class="px-2 py-2 text-left font-semibold text-gray-700 border">Taluka</th>
-                                <th class="px-2 py-2 text-left font-semibold text-gray-700 border">District</th>
-                                <th class="px-2 py-2 text-left font-semibold text-gray-700 border">State</th>
-                                <th class="px-2 py-2 text-left font-semibold text-gray-700 border">Parent Contact</th>
-                                <th class="px-2 py-2 text-center font-semibold text-gray-700 border no-print">Action</th>
+                                <th class="px-2 py-2 text-left font-semibold text-gray-800 border">Sr.No</th>
+                                <th class="px-2 py-2 text-left font-semibold text-gray-800 border">Student Name</th>
+                                <th class="px-2 py-2 text-left font-semibold text-gray-800 border">Gender</th>
+                                <th class="px-2 py-2 text-left font-semibold text-gray-800 border">Age</th>
+                                <th class="px-2 py-2 text-left font-semibold text-gray-800 border">Class</th>
+                                <th class="px-2 py-2 text-left font-semibold text-gray-800 border">Aadhaar No</th>
+                                <th class="px-2 py-2 text-left font-semibold text-gray-800 border">PEN ID</th>
+                                <th class="px-2 py-2 text-left font-semibold text-gray-800 border">Reason</th>
+                                <th class="px-2 py-2 text-left font-semibold text-gray-800 border">Taluka</th>
+                                <th class="px-2 py-2 text-left font-semibold text-gray-800 border">District</th>
+                                <th class="px-2 py-2 text-left font-semibold text-gray-800 border">State</th>
+                                <th class="px-2 py-2 text-left font-semibold text-gray-800 border">Parent Contact</th>
+                                <th class="px-2 py-2 text-center font-semibold text-gray-800 border no-print">Action</th>
                             </tr>
                         </thead>
                         <tbody id="schoolStudentsTableBody" class="bg-white divide-y divide-gray-200">
@@ -286,7 +283,7 @@
         </div>
 
         <!-- Secret Admin Login Link -->
-        <div class="text-center mb-8">
+        <div class="text-center mb-8 no-print">
             <button id="adminLoginBtn" class="text-xs text-gray-400 hover:text-gray-600 underline focus:outline-none">
                 Admin Login (View All Data & Download Excel)
             </button>
@@ -449,11 +446,9 @@
             if (!schoolName) return;
 
             const tbody = document.getElementById('schoolStudentsTableBody');
-            const badge = document.getElementById('currentSchoolBadge');
             const printHeader = document.getElementById('printSchoolHeader');
 
-            badge.textContent = schoolName + ' (Udise: ' + udisInput.value + ')';
-            printHeader.textContent = 'School: ' + schoolName + ' | Udise Code: ' + udisInput.value;
+            printHeader.innerHTML = 'School: <b>' + schoolName + '</b> | Udise Code: <b>' + udisInput.value + '</b>';
             tbody.innerHTML = '<tr><td colspan="13" class="text-center py-3 text-gray-500"><i class="fa-solid fa-spinner fa-spin mr-2"></i> Loading...</td></tr>';
 
             database.ref('migrate_students_2026').once('value')
