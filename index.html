@@ -20,6 +20,12 @@
             z-index: 9999;
             transition: opacity 0.5s ease-in-out;
         }
+        @media print {
+            body * { visibility: hidden; }
+            #printableArea, #printableArea * { visibility: visible; }
+            #printableArea { position: absolute; left: 0; top: 0; width: 100%; }
+            .no-print { display: none !important; }
+        }
     </style>
 </head>
 <body class="min-h-screen py-6 px-4 sm:px-6 lg:px-8">
@@ -234,31 +240,48 @@
             </form>
         </div>
 
-        <!-- Added Students Local List Section -->
+        <!-- Added Students Local List Section with PDF Download Option -->
         <div id="schoolStudentsSection" class="card p-6 mb-6 hidden">
-            <div class="flex justify-between items-center mb-4 border-b pb-3">
-                <h3 class="font-bold text-gray-900 text-lg"><i class="fa-solid fa-list-check mr-2 text-green-600"></i> आतापर्यंत जोडलेल्या विद्यार्थ्यांची यादी (School Preview List - Take Screenshot)</h3>
-                <span id="currentSchoolBadge" class="text-xs bg-green-100 text-green-800 px-3 py-1 rounded-full font-medium"></span>
+            <div id="printableArea">
+                <div class="flex justify-between items-center mb-4 border-b pb-3">
+                    <div>
+                        <h3 class="font-bold text-gray-900 text-lg"><i class="fa-solid fa-list-check mr-2 text-green-600"></i> जोडलेल्या विद्यार्थ्यांची यादी (Migrate Students Survey)</h3>
+                        <p id="printSchoolHeader" class="text-xs text-gray-600 mt-1 font-semibold"></p>
+                    </div>
+                    <span id="currentSchoolBadge" class="text-xs bg-green-100 text-green-800 px-3 py-1 rounded-full font-medium no-print"></span>
+                </div>
+                <div class="overflow-x-auto mb-6">
+                    <table class="min-w-full divide-y divide-gray-200 text-xs border border-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-2 py-2 text-left font-semibold text-gray-700 border">Sr.No</th>
+                                <th class="px-2 py-2 text-left font-semibold text-gray-700 border">Student Name</th>
+                                <th class="px-2 py-2 text-left font-semibold text-gray-700 border">Gender</th>
+                                <th class="px-2 py-2 text-left font-semibold text-gray-700 border">Age</th>
+                                <th class="px-2 py-2 text-left font-semibold text-gray-700 border">Class</th>
+                                <th class="px-2 py-2 text-left font-semibold text-gray-700 border">Aadhaar No</th>
+                                <th class="px-2 py-2 text-left font-semibold text-gray-700 border">PEN ID</th>
+                                <th class="px-2 py-2 text-left font-semibold text-gray-700 border">Reason</th>
+                                <th class="px-2 py-2 text-left font-semibold text-gray-700 border">Taluka</th>
+                                <th class="px-2 py-2 text-left font-semibold text-gray-700 border">District</th>
+                                <th class="px-2 py-2 text-left font-semibold text-gray-700 border">State</th>
+                                <th class="px-2 py-2 text-left font-semibold text-gray-700 border">Parent Contact</th>
+                                <th class="px-2 py-2 text-center font-semibold text-gray-700 border no-print">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="schoolStudentsTableBody" class="bg-white divide-y divide-gray-200">
+                            <!-- Populated locally -->
+                        </tbody>
+                    </table>
+                </div>
             </div>
-            <div class="overflow-x-auto mb-6">
-                <table class="min-w-full divide-y divide-gray-200 text-xs">
-                    <thead class="bg-gray-50">
-                        <tr>
-                            <th class="px-3 py-2 text-left font-semibold text-gray-700">Sr.No</th>
-                            <th class="px-3 py-2 text-left font-semibold text-gray-700">Student Name</th>
-                            <th class="px-3 py-2 text-left font-semibold text-gray-700">Gender</th>
-                            <th class="px-3 py-2 text-left font-semibold text-gray-700">Age</th>
-                            <th class="px-3 py-2 text-left font-semibold text-gray-700">Class</th>
-                            <th class="px-3 py-2 text-left font-semibold text-gray-700">Aadhaar</th>
-                            <th class="px-3 py-2 text-left font-semibold text-gray-700">PEN ID</th>
-                            <th class="px-3 py-2 text-left font-semibold text-gray-700">Reason</th>
-                            <th class="px-3 py-2 text-center font-semibold text-gray-700">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody id="schoolStudentsTableBody" class="bg-white divide-y divide-gray-200">
-                        <!-- Populated locally -->
-                    </tbody>
-                </table>
+
+            <!-- PDF Download Button (Landscape format) -->
+            <div class="text-center no-print pt-2">
+                <button type="button" onclick="downloadPDF()" class="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-8 rounded-lg shadow-lg transition duration-200 inline-flex items-center space-x-2">
+                    <i class="fa-solid fa-file-pdf"></i>
+                    <span>PDF डाऊनलोड करा (Download PDF - Landscape)</span>
+                </button>
             </div>
         </div>
 
@@ -352,8 +375,6 @@
         const schoolLockNotice = document.getElementById('schoolLockNotice');
         const unlockSchoolBtn = document.getElementById('unlockSchoolBtn');
 
-        let temporaryStudentList = [];
-
         document.addEventListener('DOMContentLoaded', () => {
             loadClusters();
         });
@@ -396,19 +417,18 @@
                 schoolSelect.classList.add('bg-gray-100', 'cursor-not-allowed');
                 schoolLockNotice.classList.remove('hidden');
                 document.getElementById('schoolStudentsSection').classList.remove('hidden');
+                loadSchoolStudents();
             }
         });
 
         unlockSchoolBtn.addEventListener('click', function() {
-            if (confirm('Are you sure you want to change the school? Unsaved students will be cleared.')) {
+            if (confirm('Are you sure you want to change the school?')) {
                 clusterSelect.disabled = false;
                 schoolSelect.disabled = false;
                 clusterSelect.classList.remove('bg-gray-100', 'cursor-not-allowed');
                 schoolSelect.classList.remove('bg-gray-100', 'cursor-not-allowed');
                 schoolLockNotice.classList.add('hidden');
                 document.getElementById('schoolStudentsSection').classList.add('hidden');
-                temporaryStudentList = [];
-                renderLocalTable();
             }
         });
 
@@ -421,6 +441,64 @@
             setTimeout(() => {
                 flash.classList.add('hidden');
             }, 1000);
+        }
+
+        // Load existing saved students for the selected school
+        function loadSchoolStudents() {
+            const schoolName = schoolSelect.value;
+            if (!schoolName) return;
+
+            const tbody = document.getElementById('schoolStudentsTableBody');
+            const badge = document.getElementById('currentSchoolBadge');
+            const printHeader = document.getElementById('printSchoolHeader');
+
+            badge.textContent = schoolName + ' (Udise: ' + udisInput.value + ')';
+            printHeader.textContent = 'School: ' + schoolName + ' | Udise Code: ' + udisInput.value;
+            tbody.innerHTML = '<tr><td colspan="13" class="text-center py-3 text-gray-500"><i class="fa-solid fa-spinner fa-spin mr-2"></i> Loading...</td></tr>';
+
+            database.ref('migrate_students_2026').once('value')
+                .then((snapshot) => {
+                    tbody.innerHTML = '';
+                    const data = snapshot.val();
+                    if (!data) {
+                        tbody.innerHTML = '<tr><td colspan="13" class="text-center py-3 text-gray-500">या शाळेसाठी अद्याप कोणतीही माहिती भरलेली नाही.</td></tr>';
+                        return;
+                    }
+
+                    let count = 0;
+                    Object.keys(data).forEach((key) => {
+                        const r = data[key];
+                        if (r.schoolName === schoolName) {
+                            count++;
+                            const tr = document.createElement('tr');
+                            tr.innerHTML = `
+                                <td class="px-2 py-2 border">${count}</td>
+                                <td class="px-2 py-2 font-medium border">${r.studentName || ''}</td>
+                                <td class="px-2 py-2 border">${r.gender || ''}</td>
+                                <td class="px-2 py-2 border">${r.age || ''}</td>
+                                <td class="px-2 py-2 border">${r.studentClass || ''}</td>
+                                <td class="px-2 py-2 border">${r.aadhaarNo || ''}</td>
+                                <td class="px-2 py-2 border">${r.penId || ''}</td>
+                                <td class="px-2 py-2 border">${r.reason || ''}</td>
+                                <td class="px-2 py-2 border">${r.migrateTaluka || ''}</td>
+                                <td class="px-2 py-2 border">${r.migrateDistrict || ''}</td>
+                                <td class="px-2 py-2 border">${r.migrateState || ''}</td>
+                                <td class="px-2 py-2 border">${r.parentContact || ''}</td>
+                                <td class="px-2 py-2 text-center border no-print">
+                                    <button onclick="deleteRecord('${key}')" class="text-red-600 hover:text-red-900 px-2 py-1"><i class="fa-solid fa-trash"></i></button>
+                                </td>
+                            `;
+                            tbody.appendChild(tr);
+                        }
+                    });
+
+                    if (count === 0) {
+                        tbody.innerHTML = '<tr><td colspan="13" class="text-center py-3 text-gray-500">या शाळेसाठी अद्याप कोणतीही माहिती भरलेली नाही.</td></tr>';
+                    }
+                })
+                .catch((err) => {
+                    tbody.innerHTML = `<tr><td colspan="13" class="text-center py-3 text-red-500">Error: ${err.message}</td></tr>`;
+                });
         }
 
         // Single Button Logic: Submit & Save directly to database
@@ -476,9 +554,6 @@
 
             database.ref('migrate_students_2026').push(studentObj)
                 .then(() => {
-                    temporaryStudentList.push(studentObj);
-                    renderLocalTable();
-
                     // Show 1-second Flash Notification
                     showFlashMessage('विद्यार्थी यशस्वीरित्या सेव्ह झाला!');
 
@@ -497,6 +572,9 @@
 
                     btn.disabled = false;
                     btn.innerHTML = '<i class="fa-solid fa-user-plus"></i> सबमिट आणि नवीन विद्यार्थी ॲड करा (Submit & Add Student)';
+
+                    // Reload school students table
+                    loadSchoolStudents();
                 })
                 .catch((err) => {
                     alert('Error saving data: ' + err.message);
@@ -505,35 +583,23 @@
                 });
         });
 
-        function renderLocalTable() {
-            const tbody = document.getElementById('schoolStudentsTableBody');
-            const badge = document.getElementById('currentSchoolBadge');
-            badge.textContent = schoolSelect.value + ' (Total Added: ' + temporaryStudentList.length + ')';
-            
-            tbody.innerHTML = '';
-            if (temporaryStudentList.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="9" class="text-center py-3 text-gray-500">अद्याप कोणताही विद्यार्थी जोडलेला नाही.</td></tr>';
-                return;
-            }
-
-            temporaryStudentList.forEach((r, idx) => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td class="px-3 py-2">${idx + 1}</td>
-                    <td class="px-3 py-2 font-medium">${r.studentName}</td>
-                    <td class="px-3 py-2">${r.gender}</td>
-                    <td class="px-3 py-2">${r.age}</td>
-                    <td class="px-3 py-2">${r.studentClass}</td>
-                    <td class="px-3 py-2">${r.aadhaarNo}</td>
-                    <td class="px-3 py-2">${r.penId || ''}</td>
-                    <td class="px-3 py-2">${r.reason}</td>
-                    <td class="px-3 py-2 text-center">
-                        <span class="text-green-600 font-semibold"><i class="fa-solid fa-check-circle"></i> Saved</span>
-                    </td>
-                `;
-                tbody.appendChild(tr);
-            });
+        // Landscape PDF Print Function
+        function downloadPDF() {
+            window.print();
         }
+
+        // Delete Record
+        window.deleteRecord = function(key) {
+            if (confirm('Are you sure you want to delete this record?')) {
+                database.ref('migrate_students_2026/' + key).remove()
+                    .then(() => {
+                        loadSchoolStudents();
+                    })
+                    .catch((err) => {
+                        alert('Failed: ' + err.message);
+                    });
+            }
+        };
 
         // Admin Modal Logic
         const adminModal = document.getElementById('adminModal');
@@ -609,7 +675,7 @@
                             <td class="px-3 py-2 whitespace-nowrap">${record.penId || ''}</td>
                             <td class="px-3 py-2">${record.reason || ''}</td>
                             <td class="px-3 py-2 text-center whitespace-nowrap">
-                                <button onclick="deleteRecord('${key}')" class="text-red-600 hover:text-red-900 px-2 py-1"><i class="fa-solid fa-trash"></i></button>
+                                <button onclick="deleteAdminRecord('${key}')" class="text-red-600 hover:text-red-900 px-2 py-1"><i class="fa-solid fa-trash"></i></button>
                             </td>
                         `;
                         tbody.appendChild(tr);
@@ -621,7 +687,7 @@
                 });
         }
 
-        window.deleteRecord = function(key) {
+        window.deleteAdminRecord = function(key) {
             if (confirm('Are you sure you want to delete this record?')) {
                 database.ref('migrate_students_2026/' + key).remove()
                     .then(() => {
