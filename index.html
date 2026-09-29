@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
-    <!-- html2pdf Library for Direct Download Without Print Dialog -->
+    <!-- html2pdf Library for Direct Download Without Blank Page Issue -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         body { background: #f0f4f8; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
@@ -574,7 +574,7 @@
                 });
         });
 
-        // Direct Landscape PDF Download without print dialog
+        // Direct Landscape PDF Download using html2pdf library (No Print Dialog)
         function downloadDirectPDF() {
             const element = document.getElementById('pdfContent');
             const schoolName = schoolSelect.value ? schoolSelect.value.replace(/[^A-Za-z0-9]/g, '_') : 'School';
