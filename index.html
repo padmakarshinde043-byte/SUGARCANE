@@ -21,7 +21,7 @@
             transition: opacity 0.5s ease-in-out;
         }
 
-        /* Clean Print Settings to avoid blank pages */
+        /* Print Settings for Direct Landscape PDF Generation with all 17 columns */
         @media print {
             @page { size: landscape; margin: 5mm; }
             body * { visibility: hidden; }
@@ -38,7 +38,7 @@
         <span id="flashText">विद्यार्थी यशस्वीरित्या सेव्ह झाला!</span>
     </div>
 
-    <div class="max-w-4xl mx-auto">
+    <div class="max-w-6xl mx-auto">
         <!-- Header -->
         <div class="card p-6 mb-6 text-center border-t-4 border-blue-600 no-print">
             <h2 class="text-xs font-semibold text-blue-600 tracking-wide uppercase">Samagra Shiksha Zilla Parishad, Beed</h2>
@@ -243,7 +243,7 @@
             </form>
         </div>
 
-        <!-- Added Students Local List Section with Clean Header & Direct PDF Download -->
+        <!-- Added Students Local List Section with All 17 Columns -->
         <div id="schoolStudentsSection" class="card p-6 mb-6 hidden">
             <div id="pdfContent" class="bg-white p-4 rounded-lg">
                 <div class="text-center mb-4 border-b pb-3">
@@ -251,22 +251,27 @@
                     <p id="printSchoolHeader" class="text-sm text-gray-700 mt-1 font-semibold"></p>
                 </div>
                 <div class="overflow-x-auto mb-6">
-                    <table class="min-w-full divide-y divide-gray-200 text-xs border border-gray-300">
+                    <table class="min-w-full divide-y divide-gray-200 text-[10px] border border-gray-300">
                         <thead class="bg-gray-100">
                             <tr>
-                                <th class="px-2 py-2 text-left font-semibold text-gray-800 border">Sr.No</th>
-                                <th class="px-2 py-2 text-left font-semibold text-gray-800 border">Student Name</th>
-                                <th class="px-2 py-2 text-left font-semibold text-gray-800 border">Gender</th>
-                                <th class="px-2 py-2 text-left font-semibold text-gray-800 border">Age</th>
-                                <th class="px-2 py-2 text-left font-semibold text-gray-800 border">Class</th>
-                                <th class="px-2 py-2 text-left font-semibold text-gray-800 border">Aadhaar No</th>
-                                <th class="px-2 py-2 text-left font-semibold text-gray-800 border">PEN ID</th>
-                                <th class="px-2 py-2 text-left font-semibold text-gray-800 border">Reason</th>
-                                <th class="px-2 py-2 text-left font-semibold text-gray-800 border">Taluka</th>
-                                <th class="px-2 py-2 text-left font-semibold text-gray-800 border">District</th>
-                                <th class="px-2 py-2 text-left font-semibold text-gray-800 border">State</th>
-                                <th class="px-2 py-2 text-left font-semibold text-gray-800 border">Parent Contact</th>
-                                <th class="px-2 py-2 text-center font-semibold text-gray-800 border no-print">Action</th>
+                                <th class="px-1 py-2 text-center font-semibold text-gray-800 border">1.Sr.No</th>
+                                <th class="px-1 py-2 text-left font-semibold text-gray-800 border">2.Block</th>
+                                <th class="px-1 py-2 text-left font-semibold text-gray-800 border">3.Cluster</th>
+                                <th class="px-1 py-2 text-left font-semibold text-gray-800 border">4.School Name</th>
+                                <th class="px-1 py-2 text-left font-semibold text-gray-800 border">5.Udise Code</th>
+                                <th class="px-1 py-2 text-left font-semibold text-gray-800 border">6.Student Name</th>
+                                <th class="px-1 py-2 text-left font-semibold text-gray-800 border">7.Aadhaar No</th>
+                                <th class="px-1 py-2 text-left font-semibold text-gray-800 border">8.PEN ID</th>
+                                <th class="px-1 py-2 text-left font-semibold text-gray-800 border">9.Gender</th>
+                                <th class="px-1 py-2 text-center font-semibold text-gray-800 border">10.Age</th>
+                                <th class="px-1 py-2 text-center font-semibold text-gray-800 border">11.Class</th>
+                                <th class="px-1 py-2 text-left font-semibold text-gray-800 border">12.Cast/Cat</th>
+                                <th class="px-1 py-2 text-left font-semibold text-gray-800 border">13.Reason</th>
+                                <th class="px-1 py-2 text-left font-semibold text-gray-800 border">14.Taluka</th>
+                                <th class="px-1 py-2 text-left font-semibold text-gray-800 border">15.District</th>
+                                <th class="px-1 py-2 text-left font-semibold text-gray-800 border">16.State</th>
+                                <th class="px-1 py-2 text-left font-semibold text-gray-800 border">17.Parent Contact</th>
+                                <th class="px-1 py-2 text-center font-semibold text-gray-800 border no-print">Action</th>
                             </tr>
                         </thead>
                         <tbody id="schoolStudentsTableBody" class="bg-white divide-y divide-gray-200">
@@ -443,23 +448,24 @@
             }, 1000);
         }
 
-        // Load existing saved students for the selected school
+        // Load existing saved students for the selected school (All 17 Columns)
         function loadSchoolStudents() {
             const schoolName = schoolSelect.value;
+            const clusterName = clusterSelect.value;
             if (!schoolName) return;
 
             const tbody = document.getElementById('schoolStudentsTableBody');
             const printHeader = document.getElementById('printSchoolHeader');
 
             printHeader.innerHTML = 'School: <b>' + schoolName + '</b> | Udise Code: <b>' + udisInput.value + '</b>';
-            tbody.innerHTML = '<tr><td colspan="13" class="text-center py-3 text-gray-500"><i class="fa-solid fa-spinner fa-spin mr-2"></i> Loading...</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="18" class="text-center py-3 text-gray-500"><i class="fa-solid fa-spinner fa-spin mr-2"></i> Loading...</td></tr>';
 
             database.ref('migrate_students_2026').once('value')
                 .then((snapshot) => {
                     tbody.innerHTML = '';
                     const data = snapshot.val();
                     if (!data) {
-                        tbody.innerHTML = '<tr><td colspan="13" class="text-center py-3 text-gray-500">या शाळेसाठी अद्याप कोणतीही माहिती भरलेली नाही.</td></tr>';
+                        tbody.innerHTML = '<tr><td colspan="18" class="text-center py-3 text-gray-500">या शाळेसाठी अद्याप कोणतीही माहिती भरलेली नाही.</td></tr>';
                         return;
                     }
 
@@ -470,19 +476,24 @@
                             count++;
                             const tr = document.createElement('tr');
                             tr.innerHTML = `
-                                <td class="px-2 py-2 border">${count}</td>
-                                <td class="px-2 py-2 font-medium border">${r.studentName || ''}</td>
-                                <td class="px-2 py-2 border">${r.gender || ''}</td>
-                                <td class="px-2 py-2 border">${r.age || ''}</td>
-                                <td class="px-2 py-2 border">${r.studentClass || ''}</td>
-                                <td class="px-2 py-2 border">${r.aadhaarNo || ''}</td>
-                                <td class="px-2 py-2 border">${r.penId || ''}</td>
-                                <td class="px-2 py-2 border">${r.reason || ''}</td>
-                                <td class="px-2 py-2 border">${r.migrateTaluka || ''}</td>
-                                <td class="px-2 py-2 border">${r.migrateDistrict || ''}</td>
-                                <td class="px-2 py-2 border">${r.migrateState || ''}</td>
-                                <td class="px-2 py-2 border">${r.parentContact || ''}</td>
-                                <td class="px-2 py-2 text-center border action-col">
+                                <td class="px-1 py-2 text-center border">${count}</td>
+                                <td class="px-1 py-2 border">${r.block || 'MAJALGAON'}</td>
+                                <td class="px-1 py-2 border">${r.cluster || clusterName}</td>
+                                <td class="px-1 py-2 font-medium border">${r.schoolName || ''}</td>
+                                <td class="px-1 py-2 border">${r.udiseCode || ''}</td>
+                                <td class="px-1 py-2 font-medium border">${r.studentName || ''}</td>
+                                <td class="px-1 py-2 border">${r.aadhaarNo || ''}</td>
+                                <td class="px-1 py-2 border">${r.penId || ''}</td>
+                                <td class="px-1 py-2 border">${r.gender || ''}</td>
+                                <td class="px-1 py-2 text-center border">${r.age || ''}</td>
+                                <td class="px-1 py-2 text-center border">${r.studentClass || ''}</td>
+                                <td class="px-1 py-2 border">${r.category || ''}</td>
+                                <td class="px-1 py-2 border">${r.reason || ''}</td>
+                                <td class="px-1 py-2 border">${r.migrateTaluka || ''}</td>
+                                <td class="px-1 py-2 border">${r.migrateDistrict || ''}</td>
+                                <td class="px-1 py-2 border">${r.migrateState || ''}</td>
+                                <td class="px-1 py-2 border">${r.parentContact || ''}</td>
+                                <td class="px-1 py-2 text-center border action-col no-print">
                                     <button onclick="deleteRecord('${key}')" class="text-red-600 hover:text-red-900 px-2 py-1"><i class="fa-solid fa-trash"></i></button>
                                 </td>
                             `;
@@ -491,11 +502,11 @@
                     });
 
                     if (count === 0) {
-                        tbody.innerHTML = '<tr><td colspan="13" class="text-center py-3 text-gray-500">या शाळेसाठी अद्याप कोणतीही माहिती भरलेली नाही.</td></tr>';
+                        tbody.innerHTML = '<tr><td colspan="18" class="text-center py-3 text-gray-500">या शाळेसाठी अद्याप कोणतीही माहिती भरलेली नाही.</td></tr>';
                     }
                 })
                 .catch((err) => {
-                    tbody.innerHTML = `<tr><td colspan="13" class="text-center py-3 text-red-500">Error: ${err.message}</td></tr>`;
+                    tbody.innerHTML = `<tr><td colspan="18" class="text-center py-3 text-red-500">Error: ${err.message}</td></tr>`;
                 });
         }
 
