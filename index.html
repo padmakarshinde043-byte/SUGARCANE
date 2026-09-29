@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+    <!-- html2pdf Library for Direct Landscape PDF Download -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         body { background: #f0f4f8; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         .card { background: #ffffff; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); }
@@ -19,12 +21,6 @@
             right: 20px;
             z-index: 9999;
             transition: opacity 0.5s ease-in-out;
-        }
-        @media print {
-            body * { visibility: hidden; }
-            #printableArea, #printableArea * { visibility: visible; }
-            #printableArea { position: absolute; left: 0; top: 0; width: 100%; }
-            .no-print { display: none !important; }
         }
     </style>
 </head>
@@ -240,11 +236,11 @@
             </form>
         </div>
 
-        <!-- Added Students Local List Section with Clean Header & PDF Download -->
+        <!-- Added Students Local List Section with Clean Header & Direct PDF Download -->
         <div id="schoolStudentsSection" class="card p-6 mb-6 hidden">
-            <div id="printableArea">
+            <div id="pdfContent" class="bg-white p-4">
                 <div class="text-center mb-4 border-b pb-3">
-                    <h3 class="font-bold text-gray-900 text-xl tracking-wide uppercase">Migrate Students List</h3>
+                    <h3 class="font-bold text-gray-900 text-xl tracking-wide uppercase">MIGRATE STUDENTS LIST</h3>
                     <p id="printSchoolHeader" class="text-sm text-gray-700 mt-1 font-semibold"></p>
                 </div>
                 <div class="overflow-x-auto mb-6">
@@ -273,9 +269,9 @@
                 </div>
             </div>
 
-            <!-- PDF Download Button (Landscape format) -->
+            <!-- Direct PDF Download Button (Landscape format) -->
             <div class="text-center no-print pt-2">
-                <button type="button" onclick="downloadPDF()" class="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-8 rounded-lg shadow-lg transition duration-200 inline-flex items-center space-x-2">
+                <button type="button" onclick="downloadDirectPDF()" class="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-8 rounded-lg shadow-lg transition duration-200 inline-flex items-center space-x-2">
                     <i class="fa-solid fa-file-pdf"></i>
                     <span>PDF डाऊनलोड करा (Download PDF - Landscape)</span>
                 </button>
@@ -578,9 +574,21 @@
                 });
         });
 
-        // Landscape PDF Print Function
-        function downloadPDF() {
-            window.print();
+        // Direct Landscape PDF Download using html2pdf library
+        function downloadDirectPDF() {
+            const element = document.getElementById('pdfContent');
+            const schoolName = schoolSelect.value ? schoolSelect.value.replace(/[^A-Za-z0-9]/g, '_') : 'School';
+            const fileName = schoolName + '_Migrate_Students.pdf';
+
+            const opt = {
+                margin:       5,
+                filename:     fileName,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2, useCORS: true },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'landscape' }
+            };
+
+            html2pdf().from(element).set(opt).save();
         }
 
         // Delete Record
