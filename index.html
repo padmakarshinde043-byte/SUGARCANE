@@ -21,15 +21,15 @@
             transition: opacity 0.5s ease-in-out;
         }
 
-        /* Perfect Landscape Print Settings for all 17 columns */
+        /* Perfect Fit Landscape Print Settings for all 17 columns in One Page */
         @media print {
             @page { size: A4 landscape; margin: 5mm; }
             body * { visibility: hidden; }
             #pdfContent, #pdfContent * { visibility: visible; }
             #pdfContent { position: absolute; left: 0; top: 0; width: 100%; margin: 0; padding: 0; background: white; }
             .no-print { display: none !important; }
-            table { width: 100% !important; font-size: 9px !important; border-collapse: collapse !important; }
-            th, td { padding: 4px 2px !important; word-break: break-word; }
+            table { width: 100% !important; font-size: 8px !important; border-collapse: collapse !important; table-layout: fixed !important; }
+            th, td { padding: 3px 1px !important; overflow: hidden; word-break: break-all; }
         }
     </style>
 </head>
@@ -253,7 +253,7 @@
                     <p id="printSchoolHeader" class="text-sm text-gray-700 mt-1 font-semibold"></p>
                 </div>
                 <div class="overflow-x-auto mb-6">
-                    <table class="min-w-full divide-y divide-gray-200 text-[10px] border border-gray-300">
+                    <table class="min-w-full divide-y divide-gray-200 text-[9px] border border-gray-300">
                         <thead class="bg-gray-100">
                             <tr>
                                 <th class="px-1 py-2 text-center font-semibold text-gray-800 border">1.Sr.No</th>
