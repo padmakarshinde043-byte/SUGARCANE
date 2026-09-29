@@ -248,13 +248,6 @@
             </div>
         </div>
 
-        <!-- Success Message Section -->
-        <div id="successMsgBox" class="card p-6 mb-6 hidden bg-green-50 border border-green-300 text-center">
-            <i class="fa-solid fa-circle-check text-green-600 text-3xl mb-2"></i>
-            <h3 class="text-lg font-bold text-green-800">Success! माहिती यशस्वीरित्या सेव्ह झाली आहे.</h3>
-            <p class="text-xs text-green-700 mt-1">आपली सर्व विद्यार्थी माहिती जतन करण्यात आली आहे.</p>
-        </div>
-
         <!-- Secret Admin Login Link -->
         <div class="text-center mb-8">
             <button id="adminLoginBtn" class="text-xs text-gray-400 hover:text-gray-600 underline focus:outline-none">
@@ -399,13 +392,12 @@
                 schoolSelect.classList.remove('bg-gray-100', 'cursor-not-allowed');
                 schoolLockNotice.classList.add('hidden');
                 document.getElementById('schoolStudentsSection').classList.add('hidden');
-                document.getElementById('successMsgBox').classList.add('hidden');
                 temporaryStudentList = [];
                 renderLocalTable();
             }
         });
 
-        // Single Button Logic: Submit & Directly Save/Add Student to Database and List
+        // Single Button Logic: Submit & Save directly to database, and display in list
         document.getElementById('addStudentBtn').addEventListener('click', function(e) {
             e.preventDefault();
 
@@ -453,17 +445,12 @@
 
             const btn = this;
             btn.disabled = true;
-            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Submitting & Saving...';
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Submitting...';
 
-            // Directly save to database
             database.ref('migrate_students_2026').push(studentObj)
                 .then(() => {
                     temporaryStudentList.push(studentObj);
                     renderLocalTable();
-
-                    // Show success preview box with submitted list
-                    renderSuccessPreview();
-                    document.getElementById('successMsgBox').classList.remove('hidden');
 
                     // Clear student input fields only
                     document.getElementById('studentName').value = '';
@@ -510,28 +497,10 @@
                     <td class="px-3 py-2">${r.aadhaarNo}</td>
                     <td class="px-3 py-2">${r.reason}</td>
                     <td class="px-3 py-2 text-center">
-                        <span class="text-green-600 font-semibold"><i class="fa-solid fa-check"></i> Saved</span>
+                        <span class="text-green-600 font-semibold"><i class="fa-solid fa-check-circle"></i> Submitted</span>
                     </td>
                 `;
                 tbody.appendChild(tr);
-            });
-        }
-
-        function renderSuccessPreview() {
-            const previewTbody = document.getElementById('submittedPreviewTableBody');
-            previewTbody.innerHTML = '';
-            temporaryStudentList.forEach((r, idx) => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td class="px-3 py-2">${idx + 1}</td>
-                    <td class="px-3 py-2 font-medium">${r.studentName}</td>
-                    <td class="px-3 py-2">${r.gender}</td>
-                    <td class="px-3 py-2">${r.age}</td>
-                    <td class="px-3 py-2">${r.studentClass}</td>
-                    <td class="px-3 py-2">${r.aadhaarNo}</td>
-                    <td class="px-3 py-2">${r.reason}</td>
-                `;
-                previewTbody.appendChild(tr);
             });
         }
 
