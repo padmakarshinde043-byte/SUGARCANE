@@ -21,14 +21,13 @@
             transition: opacity 0.5s ease-in-out;
         }
 
-        /* Strict Fit to Content & No Text Wrap Rules */
+        /* Strict Fit to Content & No Text Wrap Print Rules */
         @media print {
             @page { size: landscape; margin: 4mm; }
             body * { visibility: hidden; }
             #pdfContent, #pdfContent * { visibility: visible; }
             #pdfContent { position: absolute; left: 0; top: 0; width: 100%; margin: 0; padding: 0; background: white; }
             .no-print { display: none !important; }
-            
             table { 
                 width: auto !important; 
                 max-width: none !important; 
@@ -257,8 +256,18 @@
             </form>
         </div>
 
-        <!-- Added Students Local List Section with All 17 Columns -->
+        <!-- Added Students Local List Section with Instructions & 17 Columns -->
         <div id="schoolStudentsSection" class="card p-6 mb-6 hidden">
+            <!-- सूचना (Instructions added between submit and print) -->
+            <div class="bg-blue-50 border-l-4 border-blue-600 p-4 mb-4 rounded-r-lg no-print">
+                <div class="flex items-start space-x-3">
+                    <i class="fa-solid fa-circle-info text-blue-600 text-lg mt-0.5"></i>
+                    <p class="text-xs sm:text-sm text-blue-900 font-medium leading-relaxed">
+                        एक एक करून सर्व विद्यार्थ्यांची माहिती भरल्यानंतर आपण भरलेले विद्यार्थी बरोबर आहेत का हे खालील यादी तपासून बघा. एखादा विद्यार्थी दुबार झाला असेल तर तो आपण डिलीट करू शकता. आपल्या माहितीसाठी या विद्यार्थ्यांची एक्सेल आणि पीडीएफ डाउनलोड करून संग्रही ठेवा.
+                    </p>
+                </div>
+            </div>
+
             <div id="pdfContent" class="bg-white p-4 rounded-lg">
                 <div class="text-center mb-4 border-b pb-3">
                     <h3 class="font-bold text-gray-900 text-xl tracking-wide uppercase">MIGRATE STUDENTS LIST</h3>
@@ -295,8 +304,12 @@
                 </div>
             </div>
 
-            <!-- Direct PDF / Print Button (Landscape format) -->
-            <div class="text-center no-print pt-4">
+            <!-- PDF & Excel Download Buttons -->
+            <div class="text-center no-print pt-4 flex flex-wrap justify-center gap-4">
+                <button type="button" onclick="downloadSchoolExcel()" class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg shadow-lg transition duration-200 inline-flex items-center space-x-2">
+                    <i class="fa-solid fa-file-excel"></i>
+                    <span>एक्सेल डाऊनलोड करा (Download Excel)</span>
+                </button>
                 <button type="button" onclick="window.print()" class="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-8 rounded-lg shadow-lg transition duration-200 inline-flex items-center space-x-2">
                     <i class="fa-solid fa-file-pdf"></i>
                     <span>PDF डाऊनलोड करा (Download PDF - Landscape)</span>
@@ -462,6 +475,8 @@
             }, 1000);
         }
 
+        let currentSchoolRecords = [];
+
         // Load existing saved students for the selected school (All 17 Columns)
         function loadSchoolStudents() {
             const schoolName = schoolSelect.value;
@@ -477,6 +492,7 @@
             database.ref('migrate_students_2026').once('value')
                 .then((snapshot) => {
                     tbody.innerHTML = '';
+                    currentSchoolRecords = [];
                     const data = snapshot.val();
                     if (!data) {
                         tbody.innerHTML = '<tr><td colspan="18" class="text-center py-3 text-gray-500">या शाळेसाठी अद्याप कोणतीही माहिती भरलेली नाही.</td></tr>';
@@ -488,6 +504,9 @@
                         const r = data[key];
                         if (r.schoolName === schoolName) {
                             count++;
+                            r.firebaseKey = key;
+                            currentSchoolRecords.push(r);
+
                             const tr = document.createElement('tr');
                             tr.innerHTML = `
                                 <td class="px-1 py-2 text-center border whitespace-nowrap">${count}</td>
@@ -605,6 +624,49 @@
                     btn.innerHTML = '<i class="fa-solid fa-user-plus"></i> सबमिट आणि नवीन विद्यार्थी ॲड करा (Submit & Add Student)';
                 });
         });
+
+        // Function to Download School Wise Excel (CSV with all 17 columns)
+        function downloadSchoolExcel() {
+            if (currentSchoolRecords.length === 0) {
+                alert('No records available to download for this school.');
+                return;
+            }
+
+            let csvContent = "Sr.No,Block,Cluster,School Name,Udise Code,Student Name,Aadhaar Card No,PEN ID,Gender,Age,Class,Category,Reason,Migrate Taluka,Migrate District,Migrate State,Parent Contact,Timestamp\n";
+
+            currentSchoolRecords.forEach((r, idx) => {
+                const row = [
+                    idx + 1,
+                    `"${r.block || ''}"`,
+                    `"${r.cluster || ''}"`,
+                    `"${(r.schoolName || '').replace(/"/g, '""')}"`,
+                    `"${r.udiseCode || ''}"`,
+                    `"${(r.studentName || '').replace(/"/g, '""')}"`,
+                    `"${r.aadhaarNo || ''}"`,
+                    `"${r.penId || ''}"`,
+                    `"${r.gender || ''}"`,
+                    r.age || '',
+                    `"${r.studentClass || ''}"`,
+                    `"${r.category || ''}"`,
+                    `"${(r.reason || '').replace(/"/g, '""')}"`,
+                    `"${r.migrateTaluka || ''}"`,
+                    `"${r.migrateDistrict || ''}"`,
+                    `"${r.migrateState || ''}"`,
+                    `"${r.parentContact || ''}"`,
+                    `"${r.timestamp || ''}"`
+                ];
+                csvContent += row.join(",") + "\n";
+            });
+
+            const blob = new Blob(["\uFEFF" + csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${schoolSelect.value.replace(/[^A-Za-z0-9]/g, '_')}_Migrate_Students.csv`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
 
         // Delete Record
         window.deleteRecord = function(key) {
