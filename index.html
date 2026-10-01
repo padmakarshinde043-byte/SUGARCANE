@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+    <!-- SheetJS Library for genuine .xlsx file generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
         body { background: #f0f4f8; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         .card { background: #ffffff; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); }
@@ -304,9 +306,9 @@
 
             <!-- PDF & Excel Download Buttons -->
             <div class="text-center no-print pt-4 flex flex-wrap justify-center gap-4">
-                <button type="button" onclick="downloadSchoolExcel()" class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg shadow-lg transition duration-200 inline-flex items-center space-x-2">
+                <button type="button" onclick="downloadSchoolExcelXlsx()" class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg shadow-lg transition duration-200 inline-flex items-center space-x-2">
                     <i class="fa-solid fa-file-excel"></i>
-                    <span>एक्सेल डाऊनलोड करा (Download Excel)</span>
+                    <span>एक्सेल डाऊनलोड करा (Download XLSX)</span>
                 </button>
                 <button type="button" onclick="window.print()" class="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-8 rounded-lg shadow-lg transition duration-200 inline-flex items-center space-x-2">
                     <i class="fa-solid fa-file-pdf"></i>
@@ -346,7 +348,7 @@
                     <div class="space-x-2">
                         <button id="downloadExcelBtn" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium shadow flex items-center inline-flex space-x-1">
                             <i class="fa-solid fa-file-excel"></i>
-                            <span>Download Excel (.xls)</span>
+                            <span>Download Excel (.xlsx)</span>
                         </button>
                         <button id="refreshDataBtn" class="bg-gray-200 hover:bg-gray-300 text-gray-800 px-3 py-2 rounded-lg text-sm font-medium">
                             <i class="fa-solid fa-rotate"></i>
@@ -623,63 +625,43 @@
                 });
         });
 
-        // Function to Download School Wise Excel (.xls format)
-        function downloadSchoolExcel() {
+        // Function to Download School Wise Excel (.xlsx format using SheetJS)
+        function downloadSchoolExcelXlsx() {
             if (currentSchoolRecords.length === 0) {
                 alert('No records available to download for this school.');
                 return;
             }
 
-            let htmlTable = `<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
-            <head><meta charset="utf-8">
-            <style>
-                @page { size: landscape; }
-                table { border-collapse: collapse; width: 100%; }
-                th, td { border: 1px solid black; padding: 5px; text-align: left; font-size: 10pt; mso-number-format:"\@"; }
-                th { background-color: #f2f2f2; font-weight: bold; }
-            </style>
-            </head>
-            <body>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Sr.No</th><th>Block</th><th>Cluster</th><th>School Name</th><th>Udise Code</th><th>Student Name</th><th>Aadhaar No</th><th>PEN ID</th><th>Gender</th><th>Age</th><th>Class</th><th>Cast/Cat</th><th>Reason</th><th>Taluka</th><th>District</th><th>State</th><th>Parent Contact</th>
-                    </tr>
-                </thead>
-                <tbody>`;
+            const excelData = currentSchoolRecords.map((r, idx) => ({
+                "Sr.No": idx + 1,
+                "Block": r.block || 'MAJALGAON',
+                "Cluster": r.cluster || clusterSelect.value,
+                "School Name": r.schoolName || '',
+                "Udise Code": r.udiseCode || '',
+                "Student Name": r.studentName || '',
+                "Aadhaar No": r.aadhaarNo || '',
+                "PEN ID": r.penId || '',
+                "Gender": r.gender || '',
+                "Age": r.age || '',
+                "Class": r.studentClass || '',
+                "Cast/Cat": r.category || '',
+                "Reason": r.reason || '',
+                "Taluka": r.migrateTaluka || '',
+                "District": r.migrateDistrict || '',
+                "State": r.migrateState || '',
+                "Parent Contact": r.parentContact || ''
+            }));
 
-            currentSchoolRecords.forEach((r, idx) => {
-                htmlTable += `<tr>
-                    <td>${idx + 1}</td>
-                    <td>${r.block || ''}</td>
-                    <td>${r.cluster || ''}</td>
-                    <td>${r.schoolName || ''}</td>
-                    <td>${r.udiseCode || ''}</td>
-                    <td>${r.studentName || ''}</td>
-                    <td>${r.aadhaarNo || ''}</td>
-                    <td>${r.penId || ''}</td>
-                    <td>${r.gender || ''}</td>
-                    <td>${r.age || ''}</td>
-                    <td>${r.studentClass || ''}</td>
-                    <td>${r.category || ''}</td>
-                    <td>${r.reason || ''}</td>
-                    <td>${r.migrateTaluka || ''}</td>
-                    <td>${r.migrateDistrict || ''}</td>
-                    <td>${r.migrateState || ''}</td>
-                    <td>${r.parentContact || ''}</td>
-                </tr>`;
-            });
+            const worksheet = XLSX.utils.json_to_sheet(excelData);
+            
+            // Set landscape orientation in page setup
+            worksheet['!pagesetup'] = { orientation: 'landscape' };
 
-            htmlTable += `</tbody></table></body></html>`;
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, "Migrate Students");
 
-            const blob = new Blob([htmlTable], { type: 'application/vnd.ms-excel;charset=utf-8;' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `${schoolSelect.value.replace(/[^A-Za-z0-9]/g, '_')}_Migrate_Students.xls`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
+            const fileName = `${schoolSelect.value.replace(/[^A-Za-z0-9]/g, '_')}_Migrate_Students.xlsx`;
+            XLSX.writeFile(workbook, fileName);
         }
 
         // Delete Record
@@ -793,64 +775,42 @@
             }
         };
 
-        // Admin Dashboard Excel (.xls format) download
+        // Admin Dashboard Excel (.xlsx format using SheetJS) download
         document.getElementById('downloadExcelBtn').addEventListener('click', function() {
             if (cachedRecords.length === 0) {
                 alert('No records available to download.');
                 return;
             }
 
-            let htmlTable = `<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
-            <head><meta charset="utf-8">
-            <style>
-                @page { size: landscape; }
-                table { border-collapse: collapse; width: 100%; }
-                th, td { border: 1px solid black; padding: 5px; text-align: left; font-size: 10pt; mso-number-format:"\@"; }
-                th { background-color: #f2f2f2; font-weight: bold; }
-            </style>
-            </head>
-            <body>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Sr.No</th><th>Block</th><th>Cluster</th><th>School Name</th><th>Udise Code</th><th>Student Name</th><th>Aadhaar Card No</th><th>PEN ID</th><th>Gender</th><th>Age</th><th>Class</th><th>Category</th><th>Reason</th><th>Migrate Taluka</th><th>Migrate District</th><th>Migrate State</th><th>Parent Contact</th><th>Timestamp</th>
-                    </tr>
-                </thead>
-                <tbody>`;
+            const excelData = cachedRecords.map((r, idx) => ({
+                "Sr.No": idx + 1,
+                "Block": r.block || '',
+                "Cluster": r.cluster || '',
+                "School Name": r.schoolName || '',
+                "Udise Code": r.udiseCode || '',
+                "Student Name": r.studentName || '',
+                "Aadhaar Card No": r.aadhaarNo || '',
+                "PEN ID": r.penId || '',
+                "Gender": r.gender || '',
+                "Age": r.age || '',
+                "Class": r.studentClass || '',
+                "Category": r.category || '',
+                "Reason": r.reason || '',
+                "Migrate Taluka": r.migrateTaluka || '',
+                "Migrate District": r.migrateDistrict || '',
+                "Migrate State": r.migrateState || '',
+                "Parent Contact": r.parentContact || '',
+                "Timestamp": r.timestamp || ''
+            }));
 
-            cachedRecords.forEach((r, idx) => {
-                htmlTable += `<tr>
-                    <td>${idx + 1}</td>
-                    <td>${r.block || ''}</td>
-                    <td>${r.cluster || ''}</td>
-                    <td>${r.schoolName || ''}</td>
-                    <td>${r.udiseCode || ''}</td>
-                    <td>${r.studentName || ''}</td>
-                    <td>${r.aadhaarNo || ''}</td>
-                    <td>${r.penId || ''}</td>
-                    <td>${r.gender || ''}</td>
-                    <td>${r.age || ''}</td>
-                    <td>${r.studentClass || ''}</td>
-                    <td>${r.category || ''}</td>
-                    <td>${r.reason || ''}</td>
-                    <td>${r.migrateTaluka || ''}</td>
-                    <td>${r.migrateDistrict || ''}</td>
-                    <td>${r.migrateState || ''}</td>
-                    <td>${r.parentContact || ''}</td>
-                    <td>${r.timestamp || ''}</td>
-                </tr>`;
-            });
+            const worksheet = XLSX.utils.json_to_sheet(excelData);
+            worksheet['!pagesetup'] = { orientation: 'landscape' };
 
-            htmlTable += `</tbody></table></body></html>`;
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, "All Survey Data");
 
-            const blob = new Blob([htmlTable], { type: 'application/vnd.ms-excel;charset=utf-8;' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `Majalgaon_Migrate_Students_Survey_${new Date().toISOString().slice(0,10)}.xls`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
+            const fileName = `Majalgaon_Migrate_Students_Survey_${new Date().toISOString().slice(0,10)}.xlsx`;
+            XLSX.writeFile(workbook, fileName);
         });
     </script>
 </body>
