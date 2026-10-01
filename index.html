@@ -346,7 +346,7 @@
                     <div class="space-x-2">
                         <button id="downloadExcelBtn" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium shadow flex items-center inline-flex space-x-1">
                             <i class="fa-solid fa-file-excel"></i>
-                            <span>Download Excel (CSV)</span>
+                            <span>Download Excel (.xls)</span>
                         </button>
                         <button id="refreshDataBtn" class="bg-gray-200 hover:bg-gray-300 text-gray-800 px-3 py-2 rounded-lg text-sm font-medium">
                             <i class="fa-solid fa-rotate"></i>
@@ -623,44 +623,60 @@
                 });
         });
 
-        // Function to Download School Wise Excel (CSV with all 17 columns)
+        // Function to Download School Wise Excel (.xls format)
         function downloadSchoolExcel() {
             if (currentSchoolRecords.length === 0) {
                 alert('No records available to download for this school.');
                 return;
             }
 
-            let csvContent = "Sr.No,Block,Cluster,School Name,Udise Code,Student Name,Aadhaar Card No,PEN ID,Gender,Age,Class,Category,Reason,Migrate Taluka,Migrate District,Migrate State,Parent Contact,Timestamp\n";
+            let htmlTable = `<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
+            <head><meta charset="utf-8">
+            <style>
+                @page { size: landscape; }
+                table { border-collapse: collapse; width: 100%; }
+                th, td { border: 1px solid black; padding: 5px; text-align: left; font-size: 10pt; mso-number-format:"\@"; }
+                th { background-color: #f2f2f2; font-weight: bold; }
+            </style>
+            </head>
+            <body>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Sr.No</th><th>Block</th><th>Cluster</th><th>School Name</th><th>Udise Code</th><th>Student Name</th><th>Aadhaar No</th><th>PEN ID</th><th>Gender</th><th>Age</th><th>Class</th><th>Cast/Cat</th><th>Reason</th><th>Taluka</th><th>District</th><th>State</th><th>Parent Contact</th>
+                    </tr>
+                </thead>
+                <tbody>`;
 
             currentSchoolRecords.forEach((r, idx) => {
-                const row = [
-                    idx + 1,
-                    `"${r.block || ''}"`,
-                    `"${r.cluster || ''}"`,
-                    `"${(r.schoolName || '').replace(/"/g, '""')}"`,
-                    `"${r.udiseCode || ''}"`,
-                    `"${(r.studentName || '').replace(/"/g, '""')}"`,
-                    `"${r.aadhaarNo || ''}"`,
-                    `"${r.penId || ''}"`,
-                    `"${r.gender || ''}"`,
-                    r.age || '',
-                    `"${r.studentClass || ''}"`,
-                    `"${r.category || ''}"`,
-                    `"${(r.reason || '').replace(/"/g, '""')}"`,
-                    `"${r.migrateTaluka || ''}"`,
-                    `"${r.migrateDistrict || ''}"`,
-                    `"${r.migrateState || ''}"`,
-                    `"${r.parentContact || ''}"`,
-                    `"${r.timestamp || ''}"`
-                ];
-                csvContent += row.join(",") + "\n";
+                htmlTable += `<tr>
+                    <td>${idx + 1}</td>
+                    <td>${r.block || ''}</td>
+                    <td>${r.cluster || ''}</td>
+                    <td>${r.schoolName || ''}</td>
+                    <td>${r.udiseCode || ''}</td>
+                    <td>${r.studentName || ''}</td>
+                    <td>${r.aadhaarNo || ''}</td>
+                    <td>${r.penId || ''}</td>
+                    <td>${r.gender || ''}</td>
+                    <td>${r.age || ''}</td>
+                    <td>${r.studentClass || ''}</td>
+                    <td>${r.category || ''}</td>
+                    <td>${r.reason || ''}</td>
+                    <td>${r.migrateTaluka || ''}</td>
+                    <td>${r.migrateDistrict || ''}</td>
+                    <td>${r.migrateState || ''}</td>
+                    <td>${r.parentContact || ''}</td>
+                </tr>`;
             });
 
-            const blob = new Blob(["\uFEFF" + csvContent], { type: 'text/csv;charset=utf-8;' });
+            htmlTable += `</tbody></table></body></html>`;
+
+            const blob = new Blob([htmlTable], { type: 'application/vnd.ms-excel;charset=utf-8;' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `${schoolSelect.value.replace(/[^A-Za-z0-9]/g, '_')}_Migrate_Students.csv`;
+            a.download = `${schoolSelect.value.replace(/[^A-Za-z0-9]/g, '_')}_Migrate_Students.xls`;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
@@ -777,43 +793,61 @@
             }
         };
 
+        // Admin Dashboard Excel (.xls format) download
         document.getElementById('downloadExcelBtn').addEventListener('click', function() {
             if (cachedRecords.length === 0) {
                 alert('No records available to download.');
                 return;
             }
 
-            let csvContent = "Sr.No,Block,Cluster,School Name,Udise Code,Student Name,Aadhaar Card No,PEN ID,Gender,Age,Class,Category,Reason,Migrate Taluka,Migrate District,Migrate State,Parent Contact,Timestamp\n";
+            let htmlTable = `<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
+            <head><meta charset="utf-8">
+            <style>
+                @page { size: landscape; }
+                table { border-collapse: collapse; width: 100%; }
+                th, td { border: 1px solid black; padding: 5px; text-align: left; font-size: 10pt; mso-number-format:"\@"; }
+                th { background-color: #f2f2f2; font-weight: bold; }
+            </style>
+            </head>
+            <body>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Sr.No</th><th>Block</th><th>Cluster</th><th>School Name</th><th>Udise Code</th><th>Student Name</th><th>Aadhaar Card No</th><th>PEN ID</th><th>Gender</th><th>Age</th><th>Class</th><th>Category</th><th>Reason</th><th>Migrate Taluka</th><th>Migrate District</th><th>Migrate State</th><th>Parent Contact</th><th>Timestamp</th>
+                    </tr>
+                </thead>
+                <tbody>`;
 
             cachedRecords.forEach((r, idx) => {
-                const row = [
-                    idx + 1,
-                    `"${r.block || ''}"`,
-                    `"${r.cluster || ''}"`,
-                    `"${(r.schoolName || '').replace(/"/g, '""')}"`,
-                    `"${r.udiseCode || ''}"`,
-                    `"${(r.studentName || '').replace(/"/g, '""')}"`,
-                    `"${r.aadhaarNo || ''}"`,
-                    `"${r.penId || ''}"`,
-                    `"${r.gender || ''}"`,
-                    r.age || '',
-                    `"${r.studentClass || ''}"`,
-                    `"${r.category || ''}"`,
-                    `"${(r.reason || '').replace(/"/g, '""')}"`,
-                    `"${r.migrateTaluka || ''}"`,
-                    `"${r.migrateDistrict || ''}"`,
-                    `"${r.migrateState || ''}"`,
-                    `"${r.parentContact || ''}"`,
-                    `"${r.timestamp || ''}"`
-                ];
-                csvContent += row.join(",") + "\n";
+                htmlTable += `<tr>
+                    <td>${idx + 1}</td>
+                    <td>${r.block || ''}</td>
+                    <td>${r.cluster || ''}</td>
+                    <td>${r.schoolName || ''}</td>
+                    <td>${r.udiseCode || ''}</td>
+                    <td>${r.studentName || ''}</td>
+                    <td>${r.aadhaarNo || ''}</td>
+                    <td>${r.penId || ''}</td>
+                    <td>${r.gender || ''}</td>
+                    <td>${r.age || ''}</td>
+                    <td>${r.studentClass || ''}</td>
+                    <td>${r.category || ''}</td>
+                    <td>${r.reason || ''}</td>
+                    <td>${r.migrateTaluka || ''}</td>
+                    <td>${r.migrateDistrict || ''}</td>
+                    <td>${r.migrateState || ''}</td>
+                    <td>${r.parentContact || ''}</td>
+                    <td>${r.timestamp || ''}</td>
+                </tr>`;
             });
 
-            const blob = new Blob(["\uFEFF" + csvContent], { type: 'text/csv;charset=utf-8;' });
+            htmlTable += `</tbody></table></body></html>`;
+
+            const blob = new Blob([htmlTable], { type: 'application/vnd.ms-excel;charset=utf-8;' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `Majalgaon_Migrate_Students_Survey_${new Date().toISOString().slice(0,10)}.csv`;
+            a.download = `Majalgaon_Migrate_Students_Survey_${new Date().toISOString().slice(0,10)}.xls`;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
