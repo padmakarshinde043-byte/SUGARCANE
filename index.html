@@ -257,7 +257,7 @@
         </div>
 
         <!-- Added Students Local List Section with Instructions & 17 Columns -->
-        <div id="schoolStudentsSection" class="card p-6 mb-6 hidden">
+        <div id="schoolStudentsSection" class="card p-4 sm:p-6 mb-6 hidden">
             <!-- सूचना (Instructions added between submit and download buttons) -->
             <div class="bg-blue-50 border-l-4 border-blue-600 p-4 mb-6 rounded-r-lg no-print">
                 <div class="flex items-start space-x-3">
@@ -268,33 +268,34 @@
                 </div>
             </div>
 
-            <div id="pdfContent" class="bg-white p-4 rounded-lg">
+            <div id="pdfContent" class="bg-white p-2 sm:p-4 rounded-lg">
                 <div class="text-center mb-4 border-b pb-3">
                     <h3 class="font-bold text-gray-900 text-xl tracking-wide uppercase">MIGRATE STUDENTS LIST</h3>
                     <p id="printSchoolHeader" class="text-sm text-gray-700 mt-1 font-semibold"></p>
                 </div>
-                <div>
-                    <table class="w-full divide-y divide-gray-200 text-[7px] border border-gray-300" style="table-layout: auto;">
+                <!-- Independent Horizontal Scroll Container for Main Form Table -->
+                <div class="overflow-x-auto w-full border border-gray-200 rounded-lg">
+                    <table class="w-full divide-y divide-gray-200 text-[11px] sm:text-xs">
                         <thead class="bg-gray-100">
                             <tr>
-                                <th class="px-1 py-2 text-center font-semibold text-gray-800 border whitespace-nowrap">1.Sr.No</th>
-                                <th class="px-1 py-2 text-left font-semibold text-gray-800 border whitespace-nowrap">2.Block</th>
-                                <th class="px-1 py-2 text-left font-semibold text-gray-800 border whitespace-nowrap">3.Cluster</th>
-                                <th class="px-1 py-2 text-left font-semibold text-gray-800 border whitespace-nowrap">4.School Name</th>
-                                <th class="px-1 py-2 text-left font-semibold text-gray-800 border whitespace-nowrap">5.Udise Code</th>
-                                <th class="px-1 py-2 text-left font-semibold text-gray-800 border whitespace-nowrap">6.Student Name</th>
-                                <th class="px-1 py-2 text-left font-semibold text-gray-800 border whitespace-nowrap">7.Aadhaar No</th>
-                                <th class="px-1 py-2 text-left font-semibold text-gray-800 border whitespace-nowrap">8.PEN ID</th>
-                                <th class="px-1 py-2 text-left font-semibold text-gray-800 border whitespace-nowrap">9.Gender</th>
-                                <th class="px-1 py-2 text-center font-semibold text-gray-800 border whitespace-nowrap">10.Age</th>
-                                <th class="px-1 py-2 text-center font-semibold text-gray-800 border whitespace-nowrap">11.Class</th>
-                                <th class="px-1 py-2 text-left font-semibold text-gray-800 border whitespace-nowrap">12.Cast/Cat</th>
-                                <th class="px-1 py-2 text-left font-semibold text-gray-800 border whitespace-nowrap">13.Reason</th>
-                                <th class="px-1 py-2 text-left font-semibold text-gray-800 border whitespace-nowrap">14.Taluka</th>
-                                <th class="px-1 py-2 text-left font-semibold text-gray-800 border whitespace-nowrap">15.District</th>
-                                <th class="px-1 py-2 text-left font-semibold text-gray-800 border whitespace-nowrap">16.State</th>
-                                <th class="px-1 py-2 text-left font-semibold text-gray-800 border whitespace-nowrap">17.Parent Contact</th>
-                                <th class="px-1 py-2 text-center font-semibold text-gray-800 border no-print whitespace-nowrap">Action</th>
+                                <th class="px-2 py-2 text-center font-semibold text-gray-800 border whitespace-nowrap">1.Sr.No</th>
+                                <th class="px-2 py-2 text-left font-semibold text-gray-800 border whitespace-nowrap">2.Block</th>
+                                <th class="px-2 py-2 text-left font-semibold text-gray-800 border whitespace-nowrap">3.Cluster</th>
+                                <th class="px-2 py-2 text-left font-semibold text-gray-800 border whitespace-nowrap">4.School Name</th>
+                                <th class="px-2 py-2 text-left font-semibold text-gray-800 border whitespace-nowrap">5.Udise Code</th>
+                                <th class="px-2 py-2 text-left font-semibold text-gray-800 border whitespace-nowrap">6.Student Name</th>
+                                <th class="px-2 py-2 text-left font-semibold text-gray-800 border whitespace-nowrap">7.Aadhaar No</th>
+                                <th class="px-2 py-2 text-left font-semibold text-gray-800 border whitespace-nowrap">8.PEN ID</th>
+                                <th class="px-2 py-2 text-left font-semibold text-gray-800 border whitespace-nowrap">9.Gender</th>
+                                <th class="px-2 py-2 text-center font-semibold text-gray-800 border whitespace-nowrap">10.Age</th>
+                                <th class="px-2 py-2 text-center font-semibold text-gray-800 border whitespace-nowrap">11.Class</th>
+                                <th class="px-2 py-2 text-left font-semibold text-gray-800 border whitespace-nowrap">12.Cast/Cat</th>
+                                <th class="px-2 py-2 text-left font-semibold text-gray-800 border whitespace-nowrap">13.Reason</th>
+                                <th class="px-2 py-2 text-left font-semibold text-gray-800 border whitespace-nowrap">14.Taluka</th>
+                                <th class="px-2 py-2 text-left font-semibold text-gray-800 border whitespace-nowrap">15.District</th>
+                                <th class="px-2 py-2 text-left font-semibold text-gray-800 border whitespace-nowrap">16.State</th>
+                                <th class="px-2 py-2 text-left font-semibold text-gray-800 border whitespace-nowrap">17.Parent Contact</th>
+                                <th class="px-2 py-2 text-center font-semibold text-gray-800 border no-print whitespace-nowrap">Action</th>
                             </tr>
                         </thead>
                         <tbody id="schoolStudentsTableBody" class="bg-white divide-y divide-gray-200">
@@ -325,11 +326,11 @@
         </div>
     </div>
 
-    <!-- Admin Modal (Fixed Layout with Scrollable Table Body) -->
+    <!-- Admin Modal (Fixed Layout with Independent Internal Scroll) -->
     <div id="adminModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center p-2 sm:p-4 z-50">
-        <div class="bg-white rounded-xl max-w-5xl w-full h-[90vh] flex flex-col shadow-2xl overflow-hidden">
+        <div class="bg-white rounded-xl max-w-5xl w-full h-[85vh] flex flex-col shadow-2xl overflow-hidden">
             <!-- Modal Header (Fixed) -->
-            <div class="px-4 sm:px-6 py-4 bg-gray-900 text-white flex justify-between items-center shrink-0">
+            <div class="px-4 sm:px-6 py-3 bg-gray-900 text-white flex justify-between items-center shrink-0">
                 <h3 class="font-bold text-sm sm:text-lg"><i class="fa-solid fa-shield-halved mr-2"></i> Admin Dashboard - Majalgaon Block Survey Data</h3>
                 <button id="closeAdminModal" class="text-gray-400 hover:text-white text-xl font-bold p-1">&times;</button>
             </div>
@@ -343,10 +344,10 @@
                 <p id="authError" class="text-red-500 text-xs mt-2 hidden">Incorrect password!</p>
             </div>
 
-            <!-- Admin Dashboard Section (Fixed Controls + Scrollable Table) -->
+            <!-- Admin Dashboard Section (Fixed Controls + Scrollable Table Body) -->
             <div id="adminDashboardSection" class="hidden flex-1 flex flex-col p-4 sm:p-6 overflow-hidden">
                 <!-- Controls Header (Fixed) -->
-                <div class="flex flex-wrap justify-between items-center mb-4 gap-2 shrink-0">
+                <div class="flex flex-wrap justify-between items-center mb-3 gap-2 shrink-0">
                     <div class="text-sm text-gray-600">Total Records: <span id="totalRecordsCount" class="font-bold text-gray-900">0</span></div>
                     <div class="space-x-2">
                         <button id="downloadExcelBtn" class="bg-green-600 hover:bg-green-700 text-white px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium shadow inline-flex items-center space-x-1">
@@ -359,23 +360,23 @@
                     </div>
                 </div>
                 
-                <!-- Scrollable Table Container -->
-                <div class="flex-1 overflow-y-auto border border-gray-200 rounded-lg relative">
+                <!-- Internal Scrollable Table Container -->
+                <div class="flex-1 overflow-auto border border-gray-200 rounded-lg relative">
                     <table class="min-w-full divide-y divide-gray-200 text-xs">
-                        <thead class="bg-gray-50 sticky top-0 z-10 shadow-sm">
+                        <thead class="bg-gray-50 sticky top-0 z-20 shadow-sm">
                             <tr>
-                                <th class="px-3 py-2 text-left font-semibold text-gray-700 bg-gray-50">Sr.No</th>
-                                <th class="px-3 py-2 text-left font-semibold text-gray-700 bg-gray-50">Cluster</th>
-                                <th class="px-3 py-2 text-left font-semibold text-gray-700 bg-gray-50">School Name</th>
-                                <th class="px-3 py-2 text-left font-semibold text-gray-700 bg-gray-50">Udise Code</th>
-                                <th class="px-3 py-2 text-left font-semibold text-gray-700 bg-gray-50">Student Name</th>
-                                <th class="px-3 py-2 text-left font-semibold text-gray-700 bg-gray-50">Gender</th>
-                                <th class="px-3 py-2 text-left font-semibold text-gray-700 bg-gray-50">Age</th>
-                                <th class="px-3 py-2 text-left font-semibold text-gray-700 bg-gray-50">Class</th>
-                                <th class="px-3 py-2 text-left font-semibold text-gray-700 bg-gray-50">Aadhaar</th>
-                                <th class="px-3 py-2 text-left font-semibold text-gray-700 bg-gray-50">PEN ID</th>
-                                <th class="px-3 py-2 text-left font-semibold text-gray-700 bg-gray-50">Reason</th>
-                                <th class="px-3 py-2 text-center font-semibold text-gray-700 bg-gray-50">Action</th>
+                                <th class="px-3 py-2 text-left font-semibold text-gray-700 bg-gray-50 whitespace-nowrap">Sr.No</th>
+                                <th class="px-3 py-2 text-left font-semibold text-gray-700 bg-gray-50 whitespace-nowrap">Cluster</th>
+                                <th class="px-3 py-2 text-left font-semibold text-gray-700 bg-gray-50 whitespace-nowrap">School Name</th>
+                                <th class="px-3 py-2 text-left font-semibold text-gray-700 bg-gray-50 whitespace-nowrap">Udise Code</th>
+                                <th class="px-3 py-2 text-left font-semibold text-gray-700 bg-gray-50 whitespace-nowrap">Student Name</th>
+                                <th class="px-3 py-2 text-left font-semibold text-gray-700 bg-gray-50 whitespace-nowrap">Gender</th>
+                                <th class="px-3 py-2 text-left font-semibold text-gray-700 bg-gray-50 whitespace-nowrap">Age</th>
+                                <th class="px-3 py-2 text-left font-semibold text-gray-700 bg-gray-50 whitespace-nowrap">Class</th>
+                                <th class="px-3 py-2 text-left font-semibold text-gray-700 bg-gray-50 whitespace-nowrap">Aadhaar</th>
+                                <th class="px-3 py-2 text-left font-semibold text-gray-700 bg-gray-50 whitespace-nowrap">PEN ID</th>
+                                <th class="px-3 py-2 text-left font-semibold text-gray-700 bg-gray-50 whitespace-nowrap">Reason</th>
+                                <th class="px-3 py-2 text-center font-semibold text-gray-700 bg-gray-50 whitespace-nowrap">Action</th>
                             </tr>
                         </thead>
                         <tbody id="adminTableBody" class="bg-white divide-y divide-gray-200">
@@ -513,24 +514,24 @@
 
                             const tr = document.createElement('tr');
                             tr.innerHTML = `
-                                <td class="px-1 py-2 text-center border whitespace-nowrap">${count}</td>
-                                <td class="px-1 py-2 border whitespace-nowrap">${r.block || 'MAJALGAON'}</td>
-                                <td class="px-1 py-2 border whitespace-nowrap">${r.cluster || clusterName}</td>
-                                <td class="px-1 py-2 font-medium border whitespace-nowrap">${r.schoolName || ''}</td>
-                                <td class="px-1 py-2 border whitespace-nowrap">${r.udiseCode || ''}</td>
-                                <td class="px-1 py-2 font-medium border whitespace-nowrap">${r.studentName || ''}</td>
-                                <td class="px-1 py-2 border whitespace-nowrap">${r.aadhaarNo || ''}</td>
-                                <td class="px-1 py-2 border whitespace-nowrap">${r.penId || ''}</td>
-                                <td class="px-1 py-2 border whitespace-nowrap">${r.gender || ''}</td>
-                                <td class="px-1 py-2 text-center border whitespace-nowrap">${r.age || ''}</td>
-                                <td class="px-1 py-2 text-center border whitespace-nowrap">${r.studentClass || ''}</td>
-                                <td class="px-1 py-2 border whitespace-nowrap">${r.category || ''}</td>
-                                <td class="px-1 py-2 border whitespace-nowrap">${r.reason || ''}</td>
-                                <td class="px-1 py-2 border whitespace-nowrap">${r.migrateTaluka || ''}</td>
-                                <td class="px-1 py-2 border whitespace-nowrap">${r.migrateDistrict || ''}</td>
-                                <td class="px-1 py-2 border whitespace-nowrap">${r.migrateState || ''}</td>
-                                <td class="px-1 py-2 border whitespace-nowrap">${r.parentContact || ''}</td>
-                                <td class="px-1 py-2 text-center border action-col no-print whitespace-nowrap">
+                                <td class="px-2 py-2 text-center border whitespace-nowrap">${count}</td>
+                                <td class="px-2 py-2 border whitespace-nowrap">${r.block || 'MAJALGAON'}</td>
+                                <td class="px-2 py-2 border whitespace-nowrap">${r.cluster || clusterName}</td>
+                                <td class="px-2 py-2 font-medium border whitespace-nowrap">${r.schoolName || ''}</td>
+                                <td class="px-2 py-2 border whitespace-nowrap">${r.udiseCode || ''}</td>
+                                <td class="px-2 py-2 font-medium border whitespace-nowrap">${r.studentName || ''}</td>
+                                <td class="px-2 py-2 border whitespace-nowrap">${r.aadhaarNo || ''}</td>
+                                <td class="px-2 py-2 border whitespace-nowrap">${r.penId || ''}</td>
+                                <td class="px-2 py-2 border whitespace-nowrap">${r.gender || ''}</td>
+                                <td class="px-2 py-2 text-center border whitespace-nowrap">${r.age || ''}</td>
+                                <td class="px-2 py-2 text-center border whitespace-nowrap">${r.studentClass || ''}</td>
+                                <td class="px-2 py-2 border whitespace-nowrap">${r.category || ''}</td>
+                                <td class="px-2 py-2 border whitespace-nowrap">${r.reason || ''}</td>
+                                <td class="px-2 py-2 border whitespace-nowrap">${r.migrateTaluka || ''}</td>
+                                <td class="px-2 py-2 border whitespace-nowrap">${r.migrateDistrict || ''}</td>
+                                <td class="px-2 py-2 border whitespace-nowrap">${r.migrateState || ''}</td>
+                                <td class="px-2 py-2 border whitespace-nowrap">${r.parentContact || ''}</td>
+                                <td class="px-2 py-2 text-center border action-col no-print whitespace-nowrap">
                                     <button onclick="deleteRecord('${key}')" class="text-red-600 hover:text-red-900 px-2 py-1"><i class="fa-solid fa-trash"></i></button>
                                 </td>
                             `;
