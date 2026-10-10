@@ -326,12 +326,12 @@
     </div>
 
     <!-- Admin Modal (Fixed Layout with Scrollable Table Body) -->
-    <div id="adminModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center p-4 z-50">
+    <div id="adminModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center p-2 sm:p-4 z-50">
         <div class="bg-white rounded-xl max-w-5xl w-full h-[90vh] flex flex-col shadow-2xl overflow-hidden">
             <!-- Modal Header (Fixed) -->
-            <div class="px-6 py-4 bg-gray-900 text-white flex justify-between items-center shrink-0">
-                <h3 class="font-bold text-lg"><i class="fa-solid fa-shield-halved mr-2"></i> Admin Dashboard - Majalgaon Block Survey Data</h3>
-                <button id="closeAdminModal" class="text-gray-400 hover:text-white text-xl font-bold">&times;</button>
+            <div class="px-4 sm:px-6 py-4 bg-gray-900 text-white flex justify-between items-center shrink-0">
+                <h3 class="font-bold text-sm sm:text-lg"><i class="fa-solid fa-shield-halved mr-2"></i> Admin Dashboard - Majalgaon Block Survey Data</h3>
+                <button id="closeAdminModal" class="text-gray-400 hover:text-white text-xl font-bold p-1">&times;</button>
             </div>
             
             <div id="adminAuthSection" class="p-8 text-center max-w-md mx-auto my-auto">
@@ -344,12 +344,12 @@
             </div>
 
             <!-- Admin Dashboard Section (Fixed Controls + Scrollable Table) -->
-            <div id="adminDashboardSection" class="hidden flex-1 flex flex-col p-6 overflow-hidden">
+            <div id="adminDashboardSection" class="hidden flex-1 flex flex-col p-4 sm:p-6 overflow-hidden">
                 <!-- Controls Header (Fixed) -->
                 <div class="flex flex-wrap justify-between items-center mb-4 gap-2 shrink-0">
                     <div class="text-sm text-gray-600">Total Records: <span id="totalRecordsCount" class="font-bold text-gray-900">0</span></div>
                     <div class="space-x-2">
-                        <button id="downloadExcelBtn" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium shadow inline-flex items-center space-x-1">
+                        <button id="downloadExcelBtn" class="bg-green-600 hover:bg-green-700 text-white px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium shadow inline-flex items-center space-x-1">
                             <i class="fa-solid fa-file-excel"></i>
                             <span>Download Excel (.xlsx)</span>
                         </button>
@@ -362,7 +362,7 @@
                 <!-- Scrollable Table Container -->
                 <div class="flex-1 overflow-y-auto border border-gray-200 rounded-lg relative">
                     <table class="min-w-full divide-y divide-gray-200 text-xs">
-                        <thead class="bg-gray-50 sticky top-0 z-10">
+                        <thead class="bg-gray-50 sticky top-0 z-10 shadow-sm">
                             <tr>
                                 <th class="px-3 py-2 text-left font-semibold text-gray-700 bg-gray-50">Sr.No</th>
                                 <th class="px-3 py-2 text-left font-semibold text-gray-700 bg-gray-50">Cluster</th>
