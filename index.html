@@ -326,12 +326,12 @@
         </div>
     </div>
 
-    <!-- Admin Modal (Fixed Layout with Independent Internal Scroll) -->
+    <!-- Admin Modal (Fixed Layout with School-wise Summary) -->
     <div id="adminModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center p-2 sm:p-4 z-50">
-        <div class="bg-white rounded-xl max-w-5xl w-full h-[85vh] flex flex-col shadow-2xl overflow-hidden">
+        <div class="bg-white rounded-xl max-w-4xl w-full h-[85vh] flex flex-col shadow-2xl overflow-hidden">
             <!-- Modal Header (Fixed) -->
             <div class="px-4 sm:px-6 py-3 bg-gray-900 text-white flex justify-between items-center shrink-0">
-                <h3 class="font-bold text-sm sm:text-lg"><i class="fa-solid fa-shield-halved mr-2"></i> Admin Dashboard - Majalgaon Block Survey Data</h3>
+                <h3 class="font-bold text-sm sm:text-lg"><i class="fa-solid fa-shield-halved mr-2"></i> Admin Dashboard - School Wise Summary</h3>
                 <button id="closeAdminModal" class="text-gray-400 hover:text-white text-xl font-bold p-1">&times;</button>
             </div>
             
@@ -348,7 +348,7 @@
             <div id="adminDashboardSection" class="hidden flex-1 flex flex-col p-4 sm:p-6 overflow-hidden">
                 <!-- Controls Header (Fixed) -->
                 <div class="flex flex-wrap justify-between items-center mb-3 gap-2 shrink-0">
-                    <div class="text-sm text-gray-600">Total Records: <span id="totalRecordsCount" class="font-bold text-gray-900">0</span></div>
+                    <div class="text-sm text-gray-600">Total Schools: <span id="totalSchoolsCount" class="font-bold text-gray-900">0</span> | Total Students: <span id="totalStudentsCount" class="font-bold text-gray-900">0</span></div>
                     <div class="space-x-2">
                         <button id="downloadExcelBtn" class="bg-green-600 hover:bg-green-700 text-white px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium shadow inline-flex items-center space-x-1">
                             <i class="fa-solid fa-file-excel"></i>
@@ -361,22 +361,14 @@
                 </div>
                 
                 <!-- Internal Scrollable Table Container -->
-                <div class="flex-1 overflow-auto border border-gray-200 rounded-lg relative">
+                <div class="flex-1 overflow-y-auto border border-gray-200 rounded-lg relative">
                     <table class="min-w-full divide-y divide-gray-200 text-xs">
                         <thead class="bg-gray-50 sticky top-0 z-20 shadow-sm">
                             <tr>
-                                <th class="px-3 py-2 text-left font-semibold text-gray-700 bg-gray-50 whitespace-nowrap">Sr.No</th>
-                                <th class="px-3 py-2 text-left font-semibold text-gray-700 bg-gray-50 whitespace-nowrap">Cluster</th>
-                                <th class="px-3 py-2 text-left font-semibold text-gray-700 bg-gray-50 whitespace-nowrap">School Name</th>
-                                <th class="px-3 py-2 text-left font-semibold text-gray-700 bg-gray-50 whitespace-nowrap">Udise Code</th>
-                                <th class="px-3 py-2 text-left font-semibold text-gray-700 bg-gray-50 whitespace-nowrap">Student Name</th>
-                                <th class="px-3 py-2 text-left font-semibold text-gray-700 bg-gray-50 whitespace-nowrap">Gender</th>
-                                <th class="px-3 py-2 text-left font-semibold text-gray-700 bg-gray-50 whitespace-nowrap">Age</th>
-                                <th class="px-3 py-2 text-left font-semibold text-gray-700 bg-gray-50 whitespace-nowrap">Class</th>
-                                <th class="px-3 py-2 text-left font-semibold text-gray-700 bg-gray-50 whitespace-nowrap">Aadhaar</th>
-                                <th class="px-3 py-2 text-left font-semibold text-gray-700 bg-gray-50 whitespace-nowrap">PEN ID</th>
-                                <th class="px-3 py-2 text-left font-semibold text-gray-700 bg-gray-50 whitespace-nowrap">Reason</th>
-                                <th class="px-3 py-2 text-center font-semibold text-gray-700 bg-gray-50 whitespace-nowrap">Action</th>
+                                <th class="px-4 py-3 text-center font-semibold text-gray-700 bg-gray-50 whitespace-nowrap w-16">अनुक्रमांक (Sr.No)</th>
+                                <th class="px-4 py-3 text-left font-semibold text-gray-700 bg-gray-50 whitespace-nowrap">शाळेचे नाव (School Name)</th>
+                                <th class="px-4 py-3 text-left font-semibold text-gray-700 bg-gray-50 whitespace-nowrap">युडायस कोड (Udise Code)</th>
+                                <th class="px-4 py-3 text-center font-semibold text-gray-700 bg-gray-50 whitespace-nowrap">विद्यार्थी संख्या (Student Count)</th>
                             </tr>
                         </thead>
                         <tbody id="adminTableBody" class="bg-white divide-y divide-gray-200">
@@ -697,11 +689,15 @@
             adminDashboardSection.classList.add('hidden');
             adminPasswordInput.value = '';
             authError.classList.add('hidden');
+            // Prevent background page scrolling
+            document.body.style.overflow = 'hidden';
         });
 
         closeAdminModal.addEventListener('click', () => {
             adminModal.classList.add('hidden');
             adminModal.classList.remove('flex');
+            // Restore background page scrolling
+            document.body.style.overflow = 'auto';
         });
 
         adminAuthSubmit.addEventListener('click', () => {
@@ -716,103 +712,88 @@
 
         document.getElementById('refreshDataBtn').addEventListener('click', loadAdminData);
 
-        let cachedRecords = [];
+        let cachedSchoolSummary = [];
 
+        // Load School-Wise Summary for Admin (Grouping by School)
         function loadAdminData() {
             const tbody = document.getElementById('adminTableBody');
-            tbody.innerHTML = '<tr><td colspan="12" class="text-center py-4 text-gray-500"><i class="fa-solid fa-spinner fa-spin mr-2"></i> Loading all data...</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="4" class="text-center py-4 text-gray-500"><i class="fa-solid fa-spinner fa-spin mr-2"></i> Loading summary data...</td></tr>';
 
             database.ref('migrate_students_2026').once('value')
                 .then((snapshot) => {
                     tbody.innerHTML = '';
-                    cachedRecords = [];
+                    cachedSchoolSummary = [];
                     const data = snapshot.val();
                     if (!data) {
-                        tbody.innerHTML = '<tr><td colspan="12" class="text-center py-4 text-gray-500">No records found.</td></tr>';
-                        document.getElementById('totalRecordsCount').textContent = '0';
+                        tbody.innerHTML = '<tr><td colspan="4" class="text-center py-4 text-gray-500">No records found.</td></tr>';
+                        document.getElementById('totalSchoolsCount').textContent = '0';
+                        document.getElementById('totalStudentsCount').textContent = '0';
                         return;
                     }
 
-                    let count = 0;
+                    // Group by School Name
+                    const schoolMap = {};
+                    let totalStudentsAll = 0;
+
                     Object.keys(data).forEach((key) => {
-                        count++;
-                        const record = data[key];
-                        record.firebaseKey = key;
-                        cachedRecords.push(record);
+                        const r = data[key];
+                        const schName = (r.schoolName || 'UNKNOWN SCHOOL').trim();
+                        const udise = r.udiseCode || '';
+
+                        if (!schoolMap[schName]) {
+                            schoolMap[schName] = {
+                                schoolName: schName,
+                                udiseCode: udise,
+                                count: 0
+                            };
+                        }
+                        schoolMap[schName].count++;
+                        totalStudentsAll++;
+                    });
+
+                    let srNo = 0;
+                    Object.keys(schoolMap).sort().forEach((schName) => {
+                        srNo++;
+                        const item = schoolMap[schName];
+                        cachedSchoolSummary.push({
+                            "Sr.No": srNo,
+                            "School Name": item.schoolName,
+                            "Udise Code": item.udiseCode,
+                            "Student Count": item.count
+                        });
 
                         const tr = document.createElement('tr');
                         tr.innerHTML = `
-                            <td class="px-3 py-2 whitespace-nowrap">${count}</td>
-                            <td class="px-3 py-2 whitespace-nowrap">${record.cluster || ''}</td>
-                            <td class="px-3 py-2">${record.schoolName || ''}</td>
-                            <td class="px-3 py-2 whitespace-nowrap">${record.udiseCode || ''}</td>
-                            <td class="px-3 py-2 font-medium">${record.studentName || ''}</td>
-                            <td class="px-3 py-2 whitespace-nowrap">${record.gender || ''}</td>
-                            <td class="px-3 py-2 whitespace-nowrap">${record.age || ''}</td>
-                            <td class="px-3 py-2 whitespace-nowrap">${record.studentClass || ''}</td>
-                            <td class="px-3 py-2 whitespace-nowrap">${record.aadhaarNo || ''}</td>
-                            <td class="px-3 py-2 whitespace-nowrap">${record.penId || ''}</td>
-                            <td class="px-3 py-2">${record.reason || ''}</td>
-                            <td class="px-3 py-2 text-center whitespace-nowrap">
-                                <button onclick="deleteAdminRecord('${key}')" class="text-red-600 hover:text-red-900 px-2 py-1"><i class="fa-solid fa-trash"></i></button>
-                            </td>
+                            <td class="px-4 py-3 text-center border whitespace-nowrap">${srNo}</td>
+                            <td class="px-4 py-3 font-medium border">${item.schoolName}</td>
+                            <td class="px-4 py-3 border whitespace-nowrap">${item.udiseCode}</td>
+                            <td class="px-4 py-3 text-center font-bold text-blue-600 border whitespace-nowrap">${item.count}</td>
                         `;
                         tbody.appendChild(tr);
                     });
-                    document.getElementById('totalRecordsCount').textContent = count;
+
+                    document.getElementById('totalSchoolsCount').textContent = srNo;
+                    document.getElementById('totalStudentsCount').textContent = totalStudentsAll;
                 })
                 .catch((err) => {
-                    tbody.innerHTML = `<tr><td colspan="12" class="text-center py-4 text-red-500">Error: ${err.message}</td></tr>`;
+                    tbody.innerHTML = `<tr><td colspan="4" class="text-center py-4 text-red-500">Error: ${err.message}</td></tr>`;
                 });
         }
 
-        window.deleteAdminRecord = function(key) {
-            if (confirm('Are you sure you want to delete this record?')) {
-                database.ref('migrate_students_2026/' + key).remove()
-                    .then(() => {
-                        loadAdminData();
-                    })
-                    .catch((err) => {
-                        alert('Failed: ' + err.message);
-                    });
-            }
-        };
-
-        // Admin Dashboard Excel (.xlsx format using SheetJS) download
+        // Admin Dashboard Summary Excel (.xlsx format using SheetJS) download
         document.getElementById('downloadExcelBtn').addEventListener('click', function() {
-            if (cachedRecords.length === 0) {
-                alert('No records available to download.');
+            if (cachedSchoolSummary.length === 0) {
+                alert('No summary records available to download.');
                 return;
             }
 
-            const excelData = cachedRecords.map((r, idx) => ({
-                "Sr.No": idx + 1,
-                "Block": r.block || '',
-                "Cluster": r.cluster || '',
-                "School Name": r.schoolName || '',
-                "Udise Code": r.udiseCode || '',
-                "Student Name": r.studentName || '',
-                "Aadhaar Card No": r.aadhaarNo || '',
-                "PEN ID": r.penId || '',
-                "Gender": r.gender || '',
-                "Age": r.age || '',
-                "Class": r.studentClass || '',
-                "Category": r.category || '',
-                "Reason": r.reason || '',
-                "Migrate Taluka": r.migrateTaluka || '',
-                "Migrate District": r.migrateDistrict || '',
-                "Migrate State": r.migrateState || '',
-                "Parent Contact": r.parentContact || '',
-                "Timestamp": r.timestamp || ''
-            }));
-
-            const worksheet = XLSX.utils.json_to_sheet(excelData);
+            const worksheet = XLSX.utils.json_to_sheet(cachedSchoolSummary);
             worksheet['!pagesetup'] = { orientation: 'landscape' };
 
             const workbook = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(workbook, worksheet, "All Survey Data");
+            XLSX.utils.book_append_sheet(workbook, worksheet, "School Wise Summary");
 
-            const fileName = `Majalgaon_Migrate_Students_Survey_${new Date().toISOString().slice(0,10)}.xlsx`;
+            const fileName = `Majalgaon_School_Wise_Summary_${new Date().toISOString().slice(0,10)}.xlsx`;
             XLSX.writeFile(workbook, fileName);
         });
     </script>
